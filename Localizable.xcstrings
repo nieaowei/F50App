@@ -1,0 +1,572 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%llu" : {
+
+    },
+    "2.4 GHz" : {
+
+    },
+    "2G" : {
+
+    },
+    "3G" : {
+
+    },
+    "3G/4G PCI" : {
+
+    },
+    "3G/4G 信号强度" : {
+
+    },
+    "3G/4G 信噪比" : {
+
+    },
+    "3G/4G 小区ID" : {
+
+    },
+    "3G/4G 注册频段" : {
+
+    },
+    "3G/4G 频点" : {
+
+    },
+    "4G" : {
+
+    },
+    "4G CA 状态" : {
+
+    },
+    "4G/3G" : {
+
+    },
+    "5 GHz" : {
+
+    },
+    "5G" : {
+
+    },
+    "5G NSA" : {
+
+    },
+    "5G PCI" : {
+
+    },
+    "5G SA" : {
+
+    },
+    "5G 信号强度" : {
+
+    },
+    "5G 信噪比" : {
+
+    },
+    "5G 小区ID" : {
+
+    },
+    "5G 注册频段" : {
+
+    },
+    "5G 频点" : {
+
+    },
+    "5G/4G/3G" : {
+
+    },
+    "Access Device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接入设备"
+          }
+        }
+      }
+    },
+    "Access Method" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "访问方式"
+          }
+        }
+      }
+    },
+    "Advanced Settings" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级设置"
+          }
+        }
+      }
+    },
+    "Apply" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用"
+          }
+        }
+      }
+    },
+    "Auto" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
+    },
+    "Band" : {
+
+    },
+    "Basic" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "基础"
+          }
+        }
+      }
+    },
+    "Block" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏蔽"
+          }
+        }
+      }
+    },
+    "Block List" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "黑名单"
+          }
+        }
+      }
+    },
+    "Category" : {
+
+    },
+    "CDC_ECM" : {
+
+    },
+    "Cellular" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "蜂窝"
+          }
+        }
+      }
+    },
+    "Clear Date" : {
+
+    },
+    "Dashboard" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仪表盘"
+          }
+        }
+      }
+    },
+    "Data" : {
+
+    },
+    "Data Management" : {
+
+    },
+    "Data Type" : {
+
+    },
+    "DHCP IP池" : {
+
+    },
+    "DHCP服务" : {
+
+    },
+    "DHCP租期" : {
+
+    },
+    "EARFCN" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LTE 绝对频点编号"
+          }
+        }
+      }
+    },
+    "End Settings" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "终端设置"
+          }
+        }
+      }
+    },
+    "Host Name" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主机名"
+          }
+        }
+      }
+    },
+    "ICCID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集成电路卡标识符"
+          }
+        }
+      }
+    },
+    "IMEI" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "国际移动设备身份码"
+          }
+        }
+      }
+    },
+    "IMSI" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "国际移动用户身份码"
+          }
+        }
+      }
+    },
+    "IP Address" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IP 地址"
+          }
+        }
+      }
+    },
+    "IP地址" : {
+
+    },
+    "LAN" : {
+      "shouldTranslate" : false
+    },
+    "MAC Address" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAC地址"
+          }
+        }
+      }
+    },
+    "Manual" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手动"
+          }
+        }
+      }
+    },
+    "Network Info" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络信息"
+          }
+        }
+      }
+    },
+    "Network Settings" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络设置"
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        }
+      }
+    },
+    "Operation" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作"
+          }
+        }
+      }
+    },
+    "Password" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "密码"
+          }
+        }
+      }
+    },
+    "PCI" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "物理小区标识"
+          }
+        }
+      }
+    },
+    "Plan" : {
+
+    },
+    "Rate" : {
+
+    },
+    "Remove" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        }
+      }
+    },
+    "RNDIS" : {
+      "shouldTranslate" : false
+    },
+    "RSRP" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "参考信号接收功率"
+          }
+        }
+      }
+    },
+    "RSRQ" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RSRQ"
+          }
+        }
+      }
+    },
+    "Select a message" : {
+
+    },
+    "SIM卡号" : {
+
+    },
+    "SINR" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "信号干扰噪声比"
+          }
+        }
+      }
+    },
+    "SMS" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "短信"
+          }
+        }
+      }
+    },
+    "SSID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络名称"
+          }
+        }
+      }
+    },
+    "Time" : {
+
+    },
+    "Traffic Clear" : {
+
+    },
+    "Traffic Management" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "流量管理"
+          }
+        }
+      }
+    },
+    "Unknown" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知"
+          }
+        }
+      }
+    },
+    "USB上网协议" : {
+
+    },
+    "USB上网设置" : {
+
+    },
+    "Used" : {
+
+    },
+    "Value" : {
+
+    },
+    "WAN IP" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "广域网 IP"
+          }
+        }
+      }
+    },
+    "WAN IPv6" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "广域网 IPv6"
+          }
+        }
+      }
+    },
+    "Wi-Fi" : {
+      "shouldTranslate" : false
+    },
+    "Wi-Fi信息" : {
+
+    },
+    "WiFi" : {
+
+    },
+    "信号强度" : {
+
+    },
+    "最大连接数" : {
+
+    },
+    "剩余" : {
+
+    },
+    "子网掩码" : {
+
+    },
+    "安全模式" : {
+
+    },
+    "已锁定小区信息" : {
+
+    },
+    "归零日期：" : {
+
+    },
+    "指示灯设置" : {
+
+    },
+    "接入设备" : {
+
+    },
+    "文件共享" : {
+
+    },
+    "新增" : {
+
+    },
+    "漫游时自动连接" : {
+
+    },
+    "版本" : {
+
+    },
+    "终端信息" : {
+
+    },
+    "网络模式" : {
+
+    },
+    "超出" : {
+
+    },
+    "路由设置" : {
+
+    },
+    "运营商信息" : {
+
+    },
+    "连接模式" : {
+
+    },
+    "邻区信息" : {
+
+    },
+    "频段锁定" : {
+
+    }
+  },
+  "version" : "1.1"
+}
