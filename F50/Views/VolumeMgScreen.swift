@@ -34,9 +34,9 @@ struct VolumeMgScreen: View {
                         TextField("Clear Date", value: $clearDate, format: .number)
                     }
                     Picker("Data Type", selection: $unit) {
-//                        ForEach(VolumeLimitUnit.allCases) { un in
-//                            Text(un.localizedString).tag(un)
-//                        }
+                        ForEach(VolumeLimitUnit.allCases) { un in
+                            Text(un.localizedString).tag(un)
+                        }
                     }
                     if info != nil {
                         LabeledContent("Used") {

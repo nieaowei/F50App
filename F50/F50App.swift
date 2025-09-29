@@ -11,10 +11,15 @@ import SwiftUI
 import ServiceManagement
 
 func startHelper() {
-    let bundleID = "app.f50helper" 
+    let bundleID = "app.F50.Helper"
 //    SMAppService.
 //    SMLoginItemSetEnabled(bundleID, true)
-    SMAppService.loginItem(identifier: bundleID)
+    do {
+        try SMAppService.loginItem(identifier: bundleID).register()
+    }
+    catch{
+        print(error)
+    }
 }
 
 @main

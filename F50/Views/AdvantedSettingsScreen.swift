@@ -23,7 +23,7 @@ struct AdvantedSettingsScreen: View {
 //    @State private var
     var body: some View {
         Form {
-            Section("频段锁定") {
+            Section("Band Selection") {
                 LabeledContent("4G") {
                     ForEach(LTEBand.allCases) { lte in
                         Toggle(lte.rawValue.description, isOn: Binding(get: {
@@ -50,7 +50,7 @@ struct AdvantedSettingsScreen: View {
                 }
             }
 
-            Section("邻区信息") {
+            Section("Neighbor Cell Information") {
                 Table(of: NeighborCellInfo.self) {
                     TableColumn("Band", value: \.band.value.description)
                     TableColumn("EARFCN", value: \.earfcn.value.description)
@@ -77,9 +77,9 @@ struct AdvantedSettingsScreen: View {
                 }
             } header: {
                 HStack{
-                    Text("已锁定小区信息")
+                    Text("Locked Cell Information")
                     Spacer()
-                    Button("新增") {
+                    Button("New") {
                         
                     }
                 }

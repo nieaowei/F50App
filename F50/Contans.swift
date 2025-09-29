@@ -8,7 +8,10 @@
 import Foundation
 import SwiftUI
 
-enum VolumeLimitUnit: String, Codable, CaseIterable {
+enum VolumeLimitUnit: String, Codable, CaseIterable,Identifiable {
+    var id: String{
+        self.rawValue
+    }
     case Data = "data"
     case Time = "time"
     

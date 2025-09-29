@@ -21,42 +21,37 @@ struct EndSettingsScreen: View {
     @State var lease: String = ""
     var body: some View {
         Form {
-            Section("路由设置") {
-                TextField("IP地址", text: $ipaddr)
-                TextField("子网掩码", text: $subMask)
-                Toggle("DHCP服务", isOn: .constant(true))
-                LabeledContent("DHCP IP池") {
+            Section("Router Settings") {
+                TextField("IP Address", text: $ipaddr)
+                TextField("Subnet Mask", text: $subMask)
+                Toggle("DHCP Server", isOn: .constant(true))
+                LabeledContent("DHCP IP Pool") {
                     HStack {
                         TextField("", text: $poolStart)
                         Text(verbatim: "-")
                         TextField("", text: $poolEnd)
                     }
                 }
-                TextField("DHCP租期", text: $lease)
+                TextField("DHCP Lease Time", text: $lease)
             }
             .sectionActions {
                 Button("Apply") {}
             }
 
-            Section("USB上网设置") {
-                Toggle("指示灯设置", isOn: .constant(true))
-                Picker("USB上网协议", selection: .constant("Auto")) {
+            Section("Other Settings") {
+                Toggle("Indicator Light", isOn: .constant(true))
+                Picker("USB Internet Protocol", selection: .constant("Auto")) {
                     Text(verbatim: "Auto").tag("Auto")
                     Text(verbatim: "RNDIS").tag("RNDIS")
                     Text(verbatim: "CDC-ECM").tag("CDC-ECM")
                 }
                 .pickerStyle(.radioGroup)
-            }
-
-            Section("文件共享") {
-                Toggle("文件共享", isOn: .constant(false))
+                Toggle("File Sharing", isOn: .constant(false))
             }
         }
         .formStyle(.grouped)
         .task {
-            do {
-                try await g.refreshDHCPSettings()
-            } catch {}
+            g.refreshDHCPSettings()
         }
         .task(id: g.dhcpSettings) {
             if let info {

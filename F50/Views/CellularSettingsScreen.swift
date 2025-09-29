@@ -24,14 +24,14 @@ struct CellularSettingsScreen: View {
     
     var body: some View {
         Form {
-            Section("连接模式") {
-                Picker("连接模式", selection: $connMode) {
+            Section("Connection Mode") {
+                Picker("Connection Mode", selection: $connMode) {
                     ForEach(ConnectionMode.allCases) { mod in
                         Text(mod.localizedString).tag(mod)
                     }
                 }
                 if connMode == .Auto {
-                    Toggle("漫游时自动连接", isOn: $roamingEnabled)
+                    Toggle("Automatic while roaming", isOn: $roamingEnabled)
                 }
             }
             .sectionActions {
@@ -39,8 +39,8 @@ struct CellularSettingsScreen: View {
                     updateConnectionMode()
                 }
             }
-            Section("网络模式") {
-                Picker("网络模式", selection: $netSelect) {
+            Section("Network Selection") {
+                Picker("Network Selection", selection: $netSelect) {
                     ForEach(BearerPreference.allCases) { mod in
                         Text(mod.localizedString).tag(mod)
                     }

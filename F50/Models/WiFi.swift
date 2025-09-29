@@ -106,7 +106,7 @@ struct SetAccessPointInfo: Setter {
     let SSID: String
 //    let ApIsolate: UInt64
     let AuthMode: AuthMode
-    let ApBroadcastDisabled: IntBool
+    let ApBroadcastDisabled: UInt8Bool
     let ApMaxStationNumber: UInt64
 //    let EncrypType: String
     let Password: String

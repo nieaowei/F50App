@@ -19,8 +19,11 @@ struct WifiSettingsScreen: View {
     @State private var authmode: AuthMode = .OPEN
     @State private var pass: String = ""
     @State private var max: UInt64 = 0
-
+    @State private var broadcast: Bool = true
+    
     @State private var showPassword = false
+    
+    
 
     var body: some View {
         Form {
@@ -41,7 +44,7 @@ struct WifiSettingsScreen: View {
             if wifiSwitch != .Off {
                 Section {
                     TextField("SSID", text: $ssid)
-                    Picker("安全模式", selection: $authmode) {
+                    Picker("Security Mode", selection: $authmode) {
                         ForEach(AuthMode.allCases) { au in
                             Text(au.rawValue).tag(au)
                         }
@@ -63,11 +66,12 @@ struct WifiSettingsScreen: View {
 //                        .accessibilityLabel(showPassword ? "隐藏密码" : "显示密码")
                     }
 
-                    Picker("最大连接数", selection: $max) {
+                    Picker("Max Station Number", selection: $max) {
                         ForEach(0 ... UInt64(10), id: \.self) { num in
                             Text("\(num)").tag(num)
                         }
                     }
+                    Toggle("Broadcast SSID", isOn: $broadcast)
                 }
                 .sectionActions {
                     Button("Apply") {
@@ -91,6 +95,7 @@ struct WifiSettingsScreen: View {
                 authmode = current.AuthMode
                 max = current.ApMaxStationNumber
                 wifiSwitch = .init(rawValue: current.ChipIndex)!
+                broadcast = !current.ApBroadcastDisabled.rawValue
             }
         }
     }
@@ -109,7 +114,7 @@ struct WifiSettingsScreen: View {
 
     func updateInfo() {
         Task {
-            let setter = SetAccessPointInfo(SSID: ssid, AuthMode: authmode, ApBroadcastDisabled: .False, ApMaxStationNumber: max, Password: pass.data(using: .utf8)!.base64EncodedString())
+            let setter = SetAccessPointInfo(SSID: ssid, AuthMode: authmode, ApBroadcastDisabled: (!broadcast).u8, ApMaxStationNumber: max, Password: pass.data(using: .utf8)!.base64EncodedString())
             _ = try await setter.set(g.zteSvc)
         }
     }

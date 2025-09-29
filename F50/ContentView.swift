@@ -22,7 +22,7 @@ struct ContentView: View {
                     NavigationLink("Network Info") {
                         NetworkInfoScreen()
                     }
-                    NavigationLink("Access Device") {
+                    NavigationLink("Access Devices") {
                         StationMgScreen()
                     }
                 }

@@ -50,7 +50,7 @@ struct DashboardScreen: View {
             .fixedSize()
             .chartLegend(.hidden)
             VStack(alignment: .leading, spacing: 6) {
-                Text((dashboard?.overflow ?? false) ? "超出" : "剩余")
+                Text((dashboard?.overflow ?? false) ? "Over" : "Remain")
                     .font(.headline)
                 Text(verbatim: dashboard?.displayRemainVolume ?? "")
                     .font(.largeTitle)
@@ -70,7 +70,7 @@ struct DashboardScreen: View {
                     .padding(.horizontal)
                 Spacer()
                 VStack {
-                    Text("接入设备")
+                    Text("Access Devices")
                         .font(.headline)
                         .onTapGesture {
                             openWindow(id: "SMS")
@@ -91,20 +91,20 @@ struct DashboardScreen: View {
             Form {
                 Section("Wi-Fi信息") {
                     LabeledContent("SSID", value: dashboard?.wifi_chip1_ssid1_ssid ?? "")
-                    LabeledContent("IP地址", value: g.dashboard?.lan_ipaddr ?? "")
-                    LabeledContent("最大连接数", value: "")
+                    LabeledContent("IP Address", value: g.dashboard?.lan_ipaddr ?? "")
+                    LabeledContent("Max Station Number", value: "")
                 }
                 Section("运营商信息") {
-                    LabeledContent("SIM卡号", value: dashboard?.sim_imsi ?? "")
+                    LabeledContent("Phone Number", value: dashboard?.sim_imsi ?? "--")
                     LabeledContent("ICCID", value: dashboard?.iccid ?? "")
                     LabeledContent("IMEI", value: dashboard?.imei ?? "")
                     LabeledContent("IMSI", value: dashboard?.imsi ?? "")
-                    LabeledContent("信号强度", value: dashboard?.Z5g_rsrp.description ?? "")
+                    LabeledContent("Signal Strength", value: dashboard?.Z5g_rsrp.description ?? "")
                     LabeledContent("WAN IP", value: dashboard?.wan_ipaddr ?? "")
                     LabeledContent("WAN IPv6", value: dashboard?.ipv6_wan_ipaddr ?? "")
                 }
                 Section("终端信息") {
-                    LabeledContent("版本", value: g.dashboard?.cr_version ?? "")
+                    LabeledContent("Version", value: g.dashboard?.cr_version ?? "")
                 }
             }
             .formStyle(.grouped)
