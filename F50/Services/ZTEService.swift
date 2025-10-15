@@ -44,12 +44,12 @@ extension AutoCmds {
     }
 }
 
-actor ZTEService {
+public actor ZTEService {
     let host: URL
     let session: URLSession
     var headers: [String: String]
     
-    init(host: URL, headers: [String: String] = [:]) {
+    public init(host: URL, headers: [String: String] = [:]) {
         self.host = host
         self.headers = headers
         

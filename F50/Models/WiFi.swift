@@ -98,6 +98,21 @@ enum AuthMode: String, CaseIterable, Codable, Identifiable, Equatable {
     case WPA2PSK
     case WPA2PSKWPA3PSK
     case WPA3PSK
+    
+    var localizedString: LocalizedStringKey{
+        switch self {
+        case .OPEN:
+            "OPEN"
+        case .WPA2PSK:
+            "WPA2-PSK"
+        case .WPA2PSKWPA3PSK:
+            "WPA2-PSK/WPA3-PSK"
+        case .WPA3PSK:
+            "WPA3-PSK"
+        }
+    }
+    
+    
 }
 
 struct SetAccessPointInfo: Setter {

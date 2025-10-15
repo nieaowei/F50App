@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-
+import F50
 
 struct MenuBar: View {
     var body: some View {
@@ -62,24 +62,23 @@ struct MenuBar: View {
 
 @main
 struct HelperApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
+    
+    var g: GlobalStore = {
+        let host = "http://192.168.0.1"
+        let zte = ZTEService(host: .init(string: host)!, headers: ["Referer": host])
+        return GlobalStore(zteSvc: zte)
     }()
+    
 
     var body: some Scene {
         MenuBarExtra {
             MenuBar()
         } label: {
-            Text(verbatim: "F50")
+            HStack{
+                Text(verbatim: "5G")
+                Text(verbatim: "")
+            }
+            
         }
 
     }

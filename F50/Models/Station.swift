@@ -39,6 +39,10 @@ struct StationList: AutoCmds {
     let station_list: [StationInfo]
     let lan_station_list: [StationInfo]
 
+    var total: Int {
+        station_list.count + lan_station_list.count
+    }
+
     static func get(zteSvc: ZTEService) async throws -> StationList {
         let decoded: StationList = try await Task.detached {
             try await zteSvc.get_cmd_by_keys().0

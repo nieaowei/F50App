@@ -27,13 +27,13 @@ struct StationMgScreen: View {
 
     var body: some View {
         Form {
-            Section("接入设备") {
+            Section("Access Devices") {
                 Table(of: MergedStationInfo.self) {
                     TableColumn("Host Name", value: \.hostname)
                     TableColumn("MAC Address", value: \.mac_addr)
                     TableColumn("Access Method") { sta in
                         if sta.isWifi {
-                            Text("WiFi")
+                            Text("Wi-Fi")
                         } else {
                             Text("LAN")
                         }

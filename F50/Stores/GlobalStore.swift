@@ -53,7 +53,7 @@ struct ToolbarResp: AutoCmds {
 
     let signalbar: UInt8
     let network_provider: String
-    let network_type: String
+    let network_type: NetworkType
     let realtime_tx_thrpt: UInt64
     let realtime_rx_thrpt: UInt64
     let realtime_time: UInt64
@@ -78,6 +78,9 @@ struct DashboardResp: AutoCmds {
         case data_volume_limit_unit
         case data_volume_limit_size
         case monthly_time
+        case wan_auto_clear_flow_data_switch
+        case traffic_clear_date
+        case wifi_access_sta_num
     }
 
     let cr_version: String
@@ -90,12 +93,17 @@ struct DashboardResp: AutoCmds {
     let sim_imsi: String
     let imei: String
     let Z5g_rsrp: Int
+    let wifi_access_sta_num: StringUInt64
+//    let lan_station_list: [StationInfo]
 
     let monthly_tx_bytes: UInt64
     let monthly_rx_bytes: UInt64
     let data_volume_limit_unit: VolumeLimitUnit
     let data_volume_limit_size: String
     let monthly_time: UInt64
+
+    let wan_auto_clear_flow_data_switch: StringBool // 流量清零开关 on off
+    let traffic_clear_date: StringUInt64 // 清零日期
 
     var data_volume_limit_size_num: UInt64 {
         switch data_volume_limit_unit {
@@ -153,14 +161,14 @@ struct DashboardResp: AutoCmds {
 }
 
 @Observable
-class GlobalStore {
+public class GlobalStore {
     var zteSvc: ZTEService
 
     @ObservationIgnored
     @AppStorage("password")
     private var password: String = ""
 
-    init(zteSvc: ZTEService) {
+    public init(zteSvc: ZTEService) {
         _zteSvc = zteSvc
     }
 
@@ -287,12 +295,14 @@ class GlobalStore {
             dhcpSettings = try await DHCPSettings.get(zteSvc)
         }
     }
-    
+
     var advantedSettings: AdvantedSettings?
-    
-    func refreshAdvantedSettings(){
+
+    func refreshAdvantedSettings() {
         Task {
             advantedSettings = try await AdvantedSettings.get(zteSvc)
         }
     }
+
+   
 }

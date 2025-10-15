@@ -18,11 +18,11 @@ struct EndSettingsScreen: View {
     @State var subMask: String = ""
     @State var poolStart: String = ""
     @State var poolEnd: String = ""
-    @State var lease: String = ""
+    @State var lease: UInt64 = 0
     var body: some View {
         Form {
             Section("Router Settings") {
-                TextField("IP Address", text: $ipaddr)
+                TextField("IP Address", text: $ipaddr,)
                 TextField("Subnet Mask", text: $subMask)
                 Toggle("DHCP Server", isOn: .constant(true))
                 LabeledContent("DHCP IP Pool") {
@@ -32,7 +32,7 @@ struct EndSettingsScreen: View {
                         TextField("", text: $poolEnd)
                     }
                 }
-                TextField("DHCP Lease Time", text: $lease)
+                TextField("DHCP Lease Time", value: $lease, format: .number)
             }
             .sectionActions {
                 Button("Apply") {}
@@ -59,7 +59,9 @@ struct EndSettingsScreen: View {
                 poolStart = info.dhcpStart.stringValue
                 poolEnd = info.dhcpEnd.stringValue
                 subMask = info.lan_netmask.stringValue
-                lease = info.dhcpLease_hour
+                var dhcpLease = info.dhcpLease_hour
+                dhcpLease.removeLast()
+                lease = UInt64(dhcpLease)!
             }
         }
     }

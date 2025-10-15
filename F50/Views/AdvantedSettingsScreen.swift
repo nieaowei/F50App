@@ -19,7 +19,12 @@ struct AdvantedSettingsScreen: View {
 
     @State private var lteBand: LTEBand = .band1
     @State private var nrBand: NRBand = .band1
-    
+
+    @State private var showLock: Bool = false
+
+    @State private var EARFCN: UInt64 = 0
+    @State private var pci: UInt64 = 0
+    @State private var rat: RatType = .Rat4G
 //    @State private var
     var body: some View {
         Form {
@@ -52,12 +57,18 @@ struct AdvantedSettingsScreen: View {
 
             Section("Neighbor Cell Information") {
                 Table(of: NeighborCellInfo.self) {
-                    TableColumn("Band", value: \.band.value.description)
+                    TableColumn("Band", value: \.band.value.description).width(30)
                     TableColumn("EARFCN", value: \.earfcn.value.description)
                     TableColumn("PCI", value: \.pci.value.description)
                     TableColumn("RSRP", value: \.rsrp.value.description)
                     TableColumn("RSRQ", value: \.rsrq.value.description)
                     TableColumn("SINR", value: \.sinr.value.description)
+                    TableColumn("Operation") { cell in
+                        Button("Lock") {
+                            updateLockInfoFromNeighbor(cell)
+                        }
+                        .foregroundStyle(.tint)
+                    }
                 } rows: {
                     ForEach(info?.neighbor_cell_info ?? []) { cell in
                         TableRow(cell)
@@ -76,11 +87,14 @@ struct AdvantedSettingsScreen: View {
                     }
                 }
             } header: {
-                HStack{
+                HStack {
                     Text("Locked Cell Information")
                     Spacer()
                     Button("New") {
-                        
+                        showLock = true
+                    }
+                    Button("Unlock All"){
+                        unlockAll()
                     }
                 }
             }
@@ -99,6 +113,28 @@ struct AdvantedSettingsScreen: View {
                 }
             }
         }
+        .sheet(isPresented: $showLock) {
+            Form {
+                Section {
+                    Picker("Network Type", selection: $rat) {
+                        ForEach(RatType.allCases) { rt in
+                            Text(rt.localizedString).tag(rt)
+                        }
+                    }
+                    TextField("EARFCN", value: $EARFCN, format: .number)
+                    TextField("PCI", value: $pci, format: .number)
+                }
+                .sectionActions {
+                    HStack {
+                        Button("Cancel") {
+                            showLock = false
+                        }
+                        Button("OK") {}
+                    }
+                }
+            }
+            .formStyle(.grouped)
+        }
     }
 
     func updateBand() {
@@ -110,6 +146,39 @@ struct AdvantedSettingsScreen: View {
                 }
             }
             _ = try await set.set(g.zteSvc)
+            
+            g.refreshAdvantedSettings()
+        }
+    }
+
+    func updateLockInfo() {
+        _ = SetCellLock(earfcn: .init(EARFCN), pci: .init(pci), rat: rat)
+    }
+
+    func updateLockInfoFromNeighbor(_ neighbor: NeighborCellInfo) {
+        guard let toolbar = g.toolbar else {
+            return
+        }
+        var rat = RatType.Rat4G
+        if toolbar.network_type.is4G {
+            rat = RatType.Rat4G
+        } else if toolbar.network_type.is5G {
+            rat = RatType.Rat5G
+        } else {
+            return
+        }
+        Task {
+            let res = try await SetCellLock(earfcn: neighbor.earfcn, pci: neighbor.pci, rat: rat).set(g.zteSvc)
+            print(res)
+            g.refreshAdvantedSettings()
+        }
+    }
+    
+    func unlockAll(){
+        Task{
+            let res = try await UnlockAllCell().set(g.zteSvc)
+            print(res)
+            g.refreshAdvantedSettings()
         }
     }
 }

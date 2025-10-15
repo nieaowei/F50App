@@ -2,17 +2,10 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "—"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "%llu" : {
-
+      "shouldTranslate" : false
     },
     "2.4 GHz" : {
       "shouldTranslate" : false
@@ -280,11 +273,31 @@
         }
       }
     },
+    "Cancel" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
     "Category" : {
-
+      "shouldTranslate" : false
     },
     "CDC_ECM" : {
       "shouldTranslate" : false
+    },
+    "Celluar Info" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "蜂窝信息"
+          }
+        }
+      }
     },
     "Cellular" : {
       "localizations" : {
@@ -347,7 +360,14 @@
       }
     },
     "Data Type" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "套餐形式"
+          }
+        }
+      }
     },
     "DHCP IP Pool" : {
       "localizations" : {
@@ -385,6 +405,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "绝对频点编号"
+          }
+        }
+      }
+    },
+    "End Info" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "终端信息"
           }
         }
       }
@@ -472,6 +502,16 @@
     "LAN" : {
       "shouldTranslate" : false
     },
+    "Lock" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "锁定"
+          }
+        }
+      }
+    },
     "Locked Cell Information" : {
       "localizations" : {
         "zh-Hans" : {
@@ -552,6 +592,16 @@
         }
       }
     },
+    "Network Type" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络类型"
+          }
+        }
+      }
+    },
     "New" : {
       "localizations" : {
         "zh-Hans" : {
@@ -571,6 +621,19 @@
           }
         }
       }
+    },
+    "OK" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确定"
+          }
+        }
+      }
+    },
+    "OPEN" : {
+
     },
     "Operation" : {
       "localizations" : {
@@ -643,7 +706,7 @@
       }
     },
     "Rate" : {
-
+      "shouldTranslate" : false
     },
     "Remain" : {
       "localizations" : {
@@ -808,6 +871,16 @@
         }
       }
     },
+    "Unlock All" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部解锁"
+          }
+        }
+      }
+    },
     "USB Internet Protocol" : {
       "localizations" : {
         "zh-Hans" : {
@@ -829,7 +902,7 @@
       }
     },
     "Value" : {
-
+      "shouldTranslate" : false
     },
     "Version" : {
       "localizations" : {
@@ -864,23 +937,24 @@
     "Wi-Fi" : {
       "shouldTranslate" : false
     },
-    "Wi-Fi信息" : {
-
+    "Wi-Fi Info" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wi-Fi 信息"
+          }
+        }
+      }
     },
-    "WiFi" : {
-
+    "WPA2-PSK" : {
+      "shouldTranslate" : false
     },
-    "归零日期：" : {
-
+    "WPA2-PSK/WPA3-PSK" : {
+      "shouldTranslate" : false
     },
-    "接入设备" : {
-
-    },
-    "终端信息" : {
-
-    },
-    "运营商信息" : {
-
+    "WPA3-PSK" : {
+      "shouldTranslate" : false
     }
   },
   "version" : "1.1"

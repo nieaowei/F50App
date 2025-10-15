@@ -133,7 +133,7 @@ struct ToolbarView: View {
             .controlSize(.mini)
             .frame(width: 60, alignment: .leading)
 
-            Text(verbatim: "\(g.toolbar?.network_type ?? "")")
+            Text(verbatim: "\(g.toolbar?.network_type.rawValue ?? "")")
             Text(verbatim: "\(g.toolbar?.network_provider ?? "")")
             Image(systemName: "cellularbars", variableValue: Double(g.toolbar?.signalbar ?? 0) / 5)
 

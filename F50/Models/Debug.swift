@@ -6,13 +6,15 @@
 //
 
 import Foundation
+import SwiftUI
 
 nonisolated struct NeighborCellInfo: Codable, Equatable, Identifiable {
     var id: String {
         "\(band.value):\(earfcn.value):\(pci.value)"
     }
 
-    let band, earfcn, pci, rsrp: StringInt
+    let earfcn, pci: StringUInt64
+    let band, rsrp: StringInt
     let rsrq, sinr: StringInt
 }
 
@@ -85,10 +87,35 @@ struct SetNRBandLock: Setter {
     }
 }
 
+enum RatType: UInt64, Codable, CaseIterable, Identifiable {
+    case Rat4G = 12
+    case Rat5G = 16
+
+    var id: UInt64 {
+        rawValue
+    }
+
+    var localizedString: LocalizedStringKey {
+        switch self {
+        case .Rat4G:
+            LocalizedStringKey("4G")
+        case .Rat5G:
+            LocalizedStringKey("5G")
+        }
+    }
+}
+
 struct SetCellLock: Setter {
-    let earfcn, pci, rat: StringInt
+    let earfcn, pci: StringUInt64
+    let rat: RatType
 
     static func goformid() -> GoFormIds {
         .CELL_LOCK
+    }
+}
+
+struct UnlockAllCell: Setter {
+    static func goformid() -> GoFormIds {
+        .UNLOCK_ALL_CELL
     }
 }

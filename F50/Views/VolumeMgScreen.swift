@@ -39,12 +39,12 @@ struct VolumeMgScreen: View {
                         }
                     }
                     if info != nil {
-                        LabeledContent("Used") {
-                            TextField("", value: $usedVolume, format: .number)
+                        HStack {
+                            TextField("Used", value: $usedVolume, format: .number)
                             Text(verbatim: unit == .Data ? "GB" : "Hour")
                         }
-                        LabeledContent("Plan") {
-                            TextField("", value: $totalVolume, format: .number)
+                        HStack {
+                            TextField("Plan", value: $totalVolume, format: .number)
                             Text(verbatim: unit == .Data ? "GB" : "Hour")
                         }
                     }

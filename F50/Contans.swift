@@ -234,6 +234,7 @@ enum GoFormIds: String, Codable {
      rat: 16
      */
     case CELL_LOCK
+    case UNLOCK_ALL_CELL
     // reboot 设备
     case REBOOT_DEVICE
 //    case SHUTDOWN_DEVICE invalid

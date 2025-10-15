@@ -46,7 +46,7 @@ struct WifiSettingsScreen: View {
                     TextField("SSID", text: $ssid)
                     Picker("Security Mode", selection: $authmode) {
                         ForEach(AuthMode.allCases) { au in
-                            Text(au.rawValue).tag(au)
+                            Text(au.localizedString).tag(au)
                         }
                     }
                     HStack {

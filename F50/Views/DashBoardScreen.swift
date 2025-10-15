@@ -12,7 +12,7 @@ internal import Combine
 struct DashboardScreen: View {
     @Environment(GlobalStore.self) private var g
     @Environment(\.openWindow) private var openWindow
-    
+
     let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 
     private var dashboard: DashboardResp? {
@@ -56,9 +56,14 @@ struct DashboardScreen: View {
                     .font(.largeTitle)
                     .bold()
                     .foregroundColor((dashboard?.overflow ?? false) ? .red : .green)
-                Text("归零日期：") // 例如 2025-09-30
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                if dashboard?.wan_auto_clear_flow_data_switch.rawValue ?? false {
+                    HStack {
+                        Text("Clear Date") // 例如 2025-09-30
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Text(verbatim: dashboard?.traffic_clear_date.value.description ?? "")
+                    }
+                }
             }
         }
     }
@@ -74,27 +79,25 @@ struct DashboardScreen: View {
                         .font(.headline)
                         .onTapGesture {
                             openWindow(id: "SMS")
-                                
                         }
-                    Text(verbatim: "5 台")
+                    Text(verbatim: g.stationInfo?.total.description ?? "--")
                         .font(.largeTitle)
                         .bold()
                         .foregroundColor(.green)
                 }
                 .padding(.horizontal)
-                
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
 
 //            Divider()
             Form {
-                Section("Wi-Fi信息") {
+                Section("Wi-Fi Info") {
                     LabeledContent("SSID", value: dashboard?.wifi_chip1_ssid1_ssid ?? "")
                     LabeledContent("IP Address", value: g.dashboard?.lan_ipaddr ?? "")
                     LabeledContent("Max Station Number", value: "")
                 }
-                Section("运营商信息") {
+                Section("Celluar Info") {
                     LabeledContent("Phone Number", value: dashboard?.sim_imsi ?? "--")
                     LabeledContent("ICCID", value: dashboard?.iccid ?? "")
                     LabeledContent("IMEI", value: dashboard?.imei ?? "")
@@ -103,16 +106,18 @@ struct DashboardScreen: View {
                     LabeledContent("WAN IP", value: dashboard?.wan_ipaddr ?? "")
                     LabeledContent("WAN IPv6", value: dashboard?.ipv6_wan_ipaddr ?? "")
                 }
-                Section("终端信息") {
+                Section("End Info") {
                     LabeledContent("Version", value: g.dashboard?.cr_version ?? "")
                 }
             }
             .formStyle(.grouped)
             .task {
                 g.refreshDashboard()
+                g.refreshStationInfo()
             }
             .onReceive(timer) { _ in
                 g.refreshDashboard()
+                g.refreshStationInfo()
             }
         }
     }

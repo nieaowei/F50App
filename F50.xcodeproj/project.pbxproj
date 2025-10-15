@@ -8,7 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		158598FF2E87B05700C90416 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 158598FE2E87B05700C90416 /* Localizable.xcstrings */; };
+		158599A12E8AB2FB00C90416 /* F50.app in Resources */ = {isa = PBXBuildFile; fileRef = 1590146C2E80206000236938 /* F50.app */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		158599A22E8AB2FB00C90416 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 159014642E80206000236938 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1590146B2E80206000236938;
+			remoteInfo = F50;
+		};
+		158599A42E8AB32300C90416 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 159014642E80206000236938 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1590146B2E80206000236938;
+			remoteInfo = F50;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		158598FE2E87B05700C90416 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -90,6 +108,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				158599A32E8AB2FB00C90416 /* PBXTargetDependency */,
+				158599A52E8AB32300C90416 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				158599362E89797800C90416 /* Helper */,
@@ -166,6 +186,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				158599A12E8AB2FB00C90416 /* F50.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +216,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		158599A32E8AB2FB00C90416 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1590146B2E80206000236938 /* F50 */;
+			targetProxy = 158599A22E8AB2FB00C90416 /* PBXContainerItemProxy */;
+		};
+		158599A52E8AB32300C90416 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1590146B2E80206000236938 /* F50 */;
+			targetProxy = 158599A42E8AB32300C90416 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		158599402E89797900C90416 /* Debug */ = {
