@@ -7,12 +7,19 @@
 
 import SwiftUI
 
-struct WelcomScreen: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+struct WelcomeScreen: View {
+    @AppStorage("defaultUrl")
+    var defaultUrl: String = "http://192.168.0.1"
 
-#Preview {
-    WelcomScreen()
+    var onConfirm: () -> Void
+
+    var body: some View {
+        VStack {
+            TextField("Gateway Address", text: $defaultUrl)
+            Button("Confirm") {
+                onConfirm()
+            }
+        }
+        .padding(.all)
+    }
 }

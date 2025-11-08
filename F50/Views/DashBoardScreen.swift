@@ -98,7 +98,7 @@ struct DashboardScreen: View {
                     LabeledContent("Max Station Number", value: "")
                 }
                 Section("Celluar Info") {
-                    LabeledContent("Phone Number", value: dashboard?.sim_imsi ?? "--")
+                    LabeledContent("Phone Number", value: dashboard?.msisdn ?? "--")
                     LabeledContent("ICCID", value: dashboard?.iccid ?? "")
                     LabeledContent("IMEI", value: dashboard?.imei ?? "")
                     LabeledContent("IMSI", value: dashboard?.imsi ?? "")

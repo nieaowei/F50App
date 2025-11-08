@@ -73,6 +73,16 @@ struct VolumeInfo: AutoCmds, Equatable {
         }
     }
 
+    // mb min
+    var used_volume_mb: Float {
+        switch data_volume_limit_unit {
+        case .Data:
+            return Float(UInt32((monthly_rx_bytes + monthly_tx_bytes) / 1024 / 1024))
+        case .Time:
+            return Float(UInt64(monthly_time / 60))
+        }
+    }
+
     var remain_volume: UInt64 {
         total_volume - used_volume
     }

@@ -44,7 +44,30 @@ struct DHCPSettings: AutoCmds, Equatable {
     let lan_ipaddr: IPAddress
 }
 
-struct EndSettings: AutoCmds {
+struct DeviceSettings: AutoCmds,Equatable {
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case usb_network_protocal
+        case indicator_light_switch
+        case samba_switch
+    }
+
     let usb_network_protocal: USBNetworkProtocal
+    let indicator_light_switch: StringBool
+    let samba_switch: StringBool
+}
+
+
+struct SetIndicatorSwitch:Setter{
+    static func goformid() -> GoFormIds {
+        .INDICATOR_LIGHT_SETTING
+    }
     
+    let indicator_light_switch: UInt8Bool
+}
+
+
+struct Reboot: Setter{
+    static func goformid() -> GoFormIds {
+        .REBOOT_DEVICE
+    }
 }

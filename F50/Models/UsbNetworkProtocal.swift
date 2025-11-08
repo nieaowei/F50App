@@ -8,7 +8,11 @@
 import Foundation
 import SwiftUI
 
-enum USBNetworkProtocal: String {
+enum USBNetworkProtocal: String, Codable, CaseIterable, Identifiable {
+    var id: String {
+        self.rawValue
+    }
+
     case Auto = "0"
     case RNDIS = "1"
     case CDC_ECM = "2"

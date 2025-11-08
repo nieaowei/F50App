@@ -13,21 +13,6 @@ enum RequestBody {
     case form([String: String])
 }
 
-// extension Dictionary where Key == String, Value == String {
-//    init<T: Encodable>(_ value: T) {
-//        let encoder = JSONEncoder()
-//
-//        encoder.keyEncodingStrategy = .useDefaultKeys
-//        let data = try? encoder.encode(value)
-//        guard let data else { self = [:]; return }
-//        if let dict = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] {
-//            self = dict.compactMapValues { "\($0)" }
-//        } else {
-//            self = [:]
-//        }
-//    }
-// }
-
 nonisolated protocol AutoCmds: Codable & Sendable{
     associatedtype CodingKeys: CaseIterable & RawRepresentable where CodingKeys.RawValue == String
     

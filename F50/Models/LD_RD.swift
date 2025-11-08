@@ -23,7 +23,7 @@ struct RD: Decodable {
 }
 
 
-func getAD(zteSvc: ZTEService)async throws -> String{
+func defaultGetAD(zteSvc: ZTEService)async throws -> String{
     let rd = try await RD.get(zteSvc: zteSvc).RD
     let v = try await VersionInfo.get(zteSvc: zteSvc)
     

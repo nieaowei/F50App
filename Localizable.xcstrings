@@ -319,6 +319,9 @@
         }
       }
     },
+    "Confirm" : {
+
+    },
     "Connection Mode" : {
       "localizations" : {
         "zh-Hans" : {
@@ -438,6 +441,9 @@
           }
         }
       }
+    },
+    "Gateway Address" : {
+
     },
     "Host Name" : {
       "localizations" : {
@@ -708,6 +714,9 @@
     "Rate" : {
       "shouldTranslate" : false
     },
+    "Reboot" : {
+
+    },
     "Remain" : {
       "localizations" : {
         "zh-Hans" : {
@@ -830,6 +839,9 @@
           }
         }
       }
+    },
+    "Text" : {
+
     },
     "Time" : {
       "localizations" : {

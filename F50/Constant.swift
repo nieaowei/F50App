@@ -45,7 +45,7 @@ extension Setter {
     }
 
     func getAD(_ zteSvc: ZTEService) async throws -> String {
-        try await F50.getAD(zteSvc: zteSvc)
+        try await defaultGetAD(zteSvc: zteSvc)
     }
 }
 

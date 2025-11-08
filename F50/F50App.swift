@@ -10,16 +10,42 @@ import SwiftUI
 
 import ServiceManagement
 
-func startHelper() {
+func registerHelper() {
     let bundleID = "app.F50.Helper"
-//    SMAppService.
-//    SMLoginItemSetEnabled(bundleID, true)
     do {
-        try SMAppService.loginItem(identifier: bundleID).register()
-    }
-    catch{
+        let svc = SMAppService.loginItem(identifier: bundleID)
+        try svc.register()
+        print(svc.status.rawValue)
+    } catch {
         print(error)
     }
+}
+
+private func findHelperURL() -> URL? {
+    let mainAppURL = Bundle.main.bundleURL
+    let helperURL = mainAppURL
+        .appendingPathComponent("Contents")
+        .appendingPathComponent("Library")
+        .appendingPathComponent("LoginItems")
+        .appendingPathComponent("Helper.app")
+
+    return FileManager.default.fileExists(atPath: helperURL.path) ? helperURL : nil
+}
+
+private func checkHelperStatus() -> Bool {
+    let runningApps = NSWorkspace.shared.runningApplications
+    return runningApps.contains {
+        $0.bundleIdentifier == "app.F50.Helper"
+    }
+}
+
+func startHelper() {
+//    let bundleID = "app.F50.Helper"
+    let conf = NSWorkspace.OpenConfiguration()
+    conf.activates = false
+    conf.hides = false
+    conf.createsNewApplicationInstance = false
+    NSWorkspace.shared.openApplication(at: findHelperURL()!, configuration: conf)
 }
 
 @main
@@ -41,23 +67,31 @@ struct F50App: App {
         return GlobalStore(zteSvc: zte)
     }()
 
-    init(){
-        startHelper()
+    init() {
+        if !checkHelperStatus() {
+//            registerHelper()
+            startHelper()
+        }
     }
-    
+
+    @State var enter = false
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(g)
+            if enter {
+                ContentView()
+                    .environment(g)
+            } else {
+                WelcomeScreen {
+                    enter = true
+                }
+//                .toolbar(removing: .title)
+//                .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+//                .containerBackground(.ultraThinMaterial, for: .window)
+//                .windowMinimizeBehavior(.disabled)
+//                .windowResizeBehavior(.disabled)
+            }
         }
         .modelContainer(sharedModelContainer)
-
-        Window("SMS", id: "SMS") {
-            SmsScreen()
-                .environment(g)
-                .toolbar(removing: .title)
-                .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
-        }
-
     }
 }

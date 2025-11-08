@@ -7,26 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		150026B42EAD1A2300DABD2B /* Helper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 158599352E89797800C90416 /* Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		158598FF2E87B05700C90416 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 158598FE2E87B05700C90416 /* Localizable.xcstrings */; };
-		158599A12E8AB2FB00C90416 /* F50.app in Resources */ = {isa = PBXBuildFile; fileRef = 1590146C2E80206000236938 /* F50.app */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		158599A22E8AB2FB00C90416 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 159014642E80206000236938 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1590146B2E80206000236938;
-			remoteInfo = F50;
+/* Begin PBXCopyFilesBuildPhase section */
+		150026B32EAD19E400DABD2B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				150026B42EAD1A2300DABD2B /* Helper.app in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		158599A42E8AB32300C90416 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 159014642E80206000236938 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1590146B2E80206000236938;
-			remoteInfo = F50;
-		};
-/* End PBXContainerItemProxy section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		158598FE2E87B05700C90416 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -34,6 +30,36 @@
 		1590146C2E80206000236938 /* F50.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = F50.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		159014902E80737400236938 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1500270A2EAD54D000DABD2B /* Exceptions for "F50" folder in "Helper" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Constant.swift,
+				Extensions/Bool.swift,
+				Extensions/IPAddr.swift,
+				Extensions/MacAddr.swift,
+				Extensions/UInt64.swift,
+				Models/ConnectionModeInfo.swift,
+				Models/Debug.swift,
+				Models/Device.swift,
+				Models/LD_RD.swift,
+				Models/NetworkInformation.swift,
+				Models/PPPStatus.swift,
+				Models/SetConnectNetwork.swift,
+				Models/SetDisconnectNetwork.swift,
+				Models/SMS.swift,
+				Models/Station.swift,
+				Models/UsbNetworkProtocal.swift,
+				Models/VersionInfo.swift,
+				Models/VolumeInfo.swift,
+				Models/WiFi.swift,
+				Services/ZTEService.swift,
+				Stores/GlobalStore.swift,
+			);
+			target = 158599342E89797800C90416 /* Helper */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		158599362E89797800C90416 /* Helper */ = {
@@ -43,6 +69,9 @@
 		};
 		1590146E2E80206000236938 /* F50 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1500270A2EAD54D000DABD2B /* Exceptions for "F50" folder in "Helper" target */,
+			);
 			path = F50;
 			sourceTree = "<group>";
 		};
@@ -108,8 +137,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				158599A32E8AB2FB00C90416 /* PBXTargetDependency */,
-				158599A52E8AB32300C90416 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				158599362E89797800C90416 /* Helper */,
@@ -128,6 +155,7 @@
 				159014682E80206000236938 /* Sources */,
 				159014692E80206000236938 /* Frameworks */,
 				1590146A2E80206000236938 /* Resources */,
+				150026B32EAD19E400DABD2B /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -186,7 +214,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				158599A12E8AB2FB00C90416 /* F50.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,19 +244,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		158599A32E8AB2FB00C90416 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1590146B2E80206000236938 /* F50 */;
-			targetProxy = 158599A22E8AB2FB00C90416 /* PBXContainerItemProxy */;
-		};
-		158599A52E8AB32300C90416 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1590146B2E80206000236938 /* F50 */;
-			targetProxy = 158599A42E8AB32300C90416 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		158599402E89797900C90416 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -242,9 +256,21 @@
 				DEVELOPMENT_TEAM = G5MBBL9V7T;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = F50Helper;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -256,6 +282,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -276,9 +303,21 @@
 				DEVELOPMENT_TEAM = G5MBBL9V7T;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = F50Helper;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -290,6 +329,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;

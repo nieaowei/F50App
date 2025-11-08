@@ -2,9 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>SMLoginItemBundleIdentifier</key>
-	<string>app.F50.helper</string>
-	<key>LSUIElement</key>
-	<false/>
+	<key>SMPrivilegedExecutables</key>
+	<dict>
+		<key>app.F50.Helper</key>
+		<string>identifier "app.F50.Helper"</string>
+	</dict>
 </dict>
 </plist>

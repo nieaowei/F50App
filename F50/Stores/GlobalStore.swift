@@ -70,7 +70,7 @@ struct DashboardResp: AutoCmds {
         case ipv6_wan_ipaddr
         case imsi
         case iccid
-        case sim_imsi
+        case msisdn
         case imei
         case Z5g_rsrp
         case monthly_tx_bytes
@@ -90,7 +90,7 @@ struct DashboardResp: AutoCmds {
     let ipv6_wan_ipaddr: String
     let imsi: String
     let iccid: String
-    let sim_imsi: String
+    let msisdn: String?
     let imei: String
     let Z5g_rsrp: Int
     let wifi_access_sta_num: StringUInt64
@@ -293,6 +293,14 @@ public class GlobalStore {
     func refreshDHCPSettings() {
         Task {
             dhcpSettings = try await DHCPSettings.get(zteSvc)
+        }
+    }
+    
+    var deviceSettings: DeviceSettings?
+    
+    func refreshDeviceSettings() {
+        Task {
+            deviceSettings = try await DeviceSettings.get(zteSvc)
         }
     }
 

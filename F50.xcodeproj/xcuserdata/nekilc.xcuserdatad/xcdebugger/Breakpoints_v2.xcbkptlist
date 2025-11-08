@@ -210,64 +210,6 @@
             endingLineNumber = "179"
             landmarkName = "unlockAll()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "67DDCE95-7364-4B5A-9277-730A29BD2D5C - e1b6fb9be7343491"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 () async throws -&gt; () in F50.AdvantedSettingsScreen.unlockAll() -&gt; ()"
-                  moduleName = "F50.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nekilc/Desktop/F50/F50/Views/AdvantedSettingsScreen.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "179"
-                  endingLineNumber = "179">
-               </Location>
-               <Location
-                  uuid = "67DDCE95-7364-4B5A-9277-730A29BD2D5C - d56e544538175455"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for closure #1 () async throws -&gt; () in F50.AdvantedSettingsScreen.unlockAll() -&gt; ()"
-                  moduleName = "F50.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nekilc/Desktop/F50/F50/Views/AdvantedSettingsScreen.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "179"
-                  endingLineNumber = "179">
-               </Location>
-               <Location
-                  uuid = "67DDCE95-7364-4B5A-9277-730A29BD2D5C - 703d374aedf21292"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for closure #1 () async throws -&gt; () in F50.AdvantedSettingsScreen.unlockAll() -&gt; ()"
-                  moduleName = "F50.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nekilc/Desktop/F50/F50/Views/AdvantedSettingsScreen.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "179"
-                  endingLineNumber = "179">
-               </Location>
-               <Location
-                  uuid = "67DDCE95-7364-4B5A-9277-730A29BD2D5C - 5a4bd8fb5bddf093"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 () async throws -&gt; () in F50.AdvantedSettingsScreen.unlockAll() -&gt; ()"
-                  moduleName = "F50.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nekilc/Desktop/F50/F50/Views/AdvantedSettingsScreen.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "179"
-                  endingLineNumber = "179">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
