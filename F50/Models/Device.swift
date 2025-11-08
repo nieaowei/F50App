@@ -42,5 +42,9 @@ struct DHCPSettings: AutoCmds, Equatable {
     let tcp_mss: StringUInt64
     let mtu: StringUInt64
     let lan_ipaddr: IPAddress
+}
+
+struct EndSettings: AutoCmds {
+    let usb_network_protocal: USBNetworkProtocal
     
 }

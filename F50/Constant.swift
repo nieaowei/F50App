@@ -58,6 +58,7 @@ enum Cmds: String, Codable {
     case station_mac
     case signalbar
     case rssi
+    case msisdn
     case imsi
     case hardware_version
     case ipv6_wan_ipaddr
