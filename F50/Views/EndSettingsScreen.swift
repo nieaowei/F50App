@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct EndSettingsScreen: View {
     @Environment(GlobalStore.self) var g: GlobalStore
@@ -86,8 +87,10 @@ struct EndSettingsScreen: View {
     }
 
     func updateIndicator(_ status: Bool) {
+        Logger.ui.debug("Setting indicator light to \(status)")
         Task {
             _ = await SetIndicatorSwitch(indicator_light_switch: status.u8).set(g.zteSvc)
+            Logger.ui.info("Indicator light \(status ? "on" : "off")")
         }
     }
 }

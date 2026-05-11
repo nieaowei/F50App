@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-internal import Combine
+import OSLog
 
 struct StationMgScreen: View {
     @Environment(GlobalStore.self) var g: GlobalStore
-
-    var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
     var info: StationList? {
         g.stationInfo
@@ -81,15 +79,18 @@ struct StationMgScreen: View {
         .task {
             g.refreshStationInfo()
             g.refreshAccessControlInfo()
-        }
-        .onReceive(timer) { _ in
-            g.refreshStationInfo()
-            g.refreshAccessControlInfo()
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(5))
+                g.refreshStationInfo()
+                g.refreshAccessControlInfo()
+            }
         }
     }
 
     func addBlack(_ name: String, _ mac: String) {
+        Logger.ui.debug("Adding \(name) (\(mac)) to blacklist")
         guard var accessControlInfo = g.accessControlInfo else {
+            Logger.ui.error("Cannot add to blacklist: access control info not loaded")
             return
         }
         accessControlInfo.appendBlack(name, mac)
@@ -97,22 +98,30 @@ struct StationMgScreen: View {
         Task {
             let resp: Result<DefaultResp, Error> = await accessControlInfo.set(g.zteSvc)
             if case .success(let data) = resp, data.result.rawValue {
+                Logger.ui.info("\(name) (\(mac)) added to blacklist")
                 g.refreshAccessControlInfo()
                 g.refreshStationInfo()
+            } else if case .failure(let err) = resp {
+                Logger.ui.error("Failed to add \(name) to blacklist: \(err.localizedDescription)")
             }
         }
     }
 
     func removeBlack(_ name: String, _ mac: String) {
+        Logger.ui.debug("Removing \(name) (\(mac)) from blacklist")
         guard var accessControlInfo = g.accessControlInfo else {
+            Logger.ui.error("Cannot remove from blacklist: access control info not loaded")
             return
         }
         accessControlInfo.removeBlack(mac)
         Task {
             let resp: Result<DefaultResp, Error> = await accessControlInfo.set(g.zteSvc)
             if case .success(let data) = resp, data.result.rawValue {
+                Logger.ui.info("\(name) (\(mac)) removed from blacklist")
                 g.refreshAccessControlInfo()
                 g.refreshStationInfo()
+            } else if case .failure(let err) = resp {
+                Logger.ui.error("Failed to remove \(name) from blacklist: \(err.localizedDescription)")
             }
         }
     }

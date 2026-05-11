@@ -5,9 +5,10 @@
 //  Created by Nekilc on 2025/9/28.
 //
 
-import SwiftData
 import SwiftUI
-internal import Combine
+import OSLog
+
+private let logger = Logger(subsystem: "app.F50.Helper", category: "Helper")
 
 private let gatewayPasswordKey = "gatewayPassword"
 
@@ -48,15 +49,10 @@ struct WifiListButton: View {
     }
 }
 
-import OSLog
-
-let logger: Logger = .init(subsystem: "app.F50.Helper", category: "menubar")
-
 struct MenuBar: View {
     @Environment(GlobalStore.self) var g
 
     init() {
-//        print("MenuBar Init")
         logger.info("MenuBar Init")
     }
 
@@ -132,9 +128,6 @@ struct HelperApp: App {
         g.toolbar
     }
 
-    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
-    let timer5 = Timer.publish(every: 300, on: .main, in: .common).autoconnect()
-
     var body: some Scene {
         MenuBarExtra {
             MenuBar()
@@ -142,8 +135,9 @@ struct HelperApp: App {
                 .task {
                     do {
                         _ = try await g.login(password: gatewayPassword)
+                        logger.info("Helper initial login success")
                     } catch {
-                        print(error)
+                        logger.error("Helper initial login failed: \(error.localizedDescription)")
                     }
                 }
         } label: {
@@ -154,12 +148,16 @@ struct HelperApp: App {
             .task {
                 g.refreshToolbar()
                 g.refreshLogin(password: gatewayPassword)
+                while !Task.isCancelled {
+                    try? await Task.sleep(for: .seconds(3))
+                    g.refreshToolbar()
+                }
             }
-            .onReceive(timer) { _ in
-                g.refreshToolbar()
-            }
-            .onReceive(timer5) { _ in
-                g.refreshLogin(password: gatewayPassword)
+            .task {
+                while !Task.isCancelled {
+                    try? await Task.sleep(for: .seconds(300))
+                    g.refreshLogin(password: gatewayPassword)
+                }
             }
         }
         .menuBarExtraStyle(.window)

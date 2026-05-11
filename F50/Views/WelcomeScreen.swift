@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct GatewayEntry: Codable, Equatable, Hashable {
     var url: String
@@ -191,10 +192,12 @@ struct WelcomeScreen: View {
     private func checkConnection() {
         guard !inputUrl.isEmpty else { return }
 
+        Logger.ui.debug("Checking connection to \(self.inputUrl)")
         status = .checking
         isChecking = true
 
         guard let url = URL(string: inputUrl.hasPrefix("http") ? inputUrl : "http://\(inputUrl)") else {
+            Logger.ui.error("Invalid URL: \(self.inputUrl)")
             status = .failed("Invalid URL")
             isChecking = false
             return
@@ -206,9 +209,11 @@ struct WelcomeScreen: View {
         URLSession.shared.dataTask(with: request) { _, response, error in
             DispatchQueue.main.async {
                 isChecking = false
-                if error != nil {
+                if let error {
+                    Logger.ui.error("Connection failed: \(error.localizedDescription)")
                     status = .failed("Connection failed")
                 } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode < 500 {
+                    Logger.ui.debug("Gateway reachable, attempting login...")
                     attemptLogin()
                 } else {
                     attemptLogin()
@@ -218,10 +223,12 @@ struct WelcomeScreen: View {
     }
 
     private func attemptLogin() {
+        Logger.ui.debug("Attempting login to \(self.inputUrl)")
         status = .connecting
         isChecking = true
 
         guard let url = URL(string: inputUrl) else {
+            Logger.ui.error("Invalid URL during login")
             status = .failed("Invalid URL")
             isChecking = false
             return
@@ -234,10 +241,12 @@ struct WelcomeScreen: View {
             await MainActor.run {
                 isChecking = false
                 if case .success(let loginResp) = resp, loginResp.result == .Ok {
+                    Logger.ui.info("Login successful for \(self.inputUrl)")
                     defaultUrl = inputUrl
                     saveToHistory()
                     onConfirm(inputUrl, password)
                 } else {
+                    Logger.ui.error("Login failed for \(self.inputUrl)")
                     status = .loginFailed("Login failed: Invalid password")
                 }
             }

@@ -7,13 +7,10 @@
 
 import Charts
 import SwiftUI
-internal import Combine
 
 struct DashboardScreen: View {
     @Environment(GlobalStore.self) private var g
     @Environment(\.openWindow) private var openWindow
-
-    let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 
     private var dashboard: DashboardResp? {
         g.dashboard
@@ -102,7 +99,7 @@ struct DashboardScreen: View {
                     LabeledContent("ICCID", value: dashboard?.iccid ?? "")
                     LabeledContent("IMEI", value: dashboard?.imei ?? "")
                     LabeledContent("IMSI", value: dashboard?.imsi ?? "")
-                    LabeledContent("Signal Strength", value: dashboard?.Z5g_rsrp.description ?? "")
+                    LabeledContent("Signal Strength", value: dashboard?.Z5g_rsrp?.description ?? "")
                     LabeledContent("WAN IP", value: dashboard?.wan_ipaddr ?? "")
                     LabeledContent("WAN IPv6", value: dashboard?.ipv6_wan_ipaddr ?? "")
                 }
@@ -114,10 +111,11 @@ struct DashboardScreen: View {
             .task {
                 g.refreshDashboard()
                 g.refreshStationInfo()
-            }
-            .onReceive(timer) { _ in
-                g.refreshDashboard()
-                g.refreshStationInfo()
+                while !Task.isCancelled {
+                    try? await Task.sleep(for: .seconds(10))
+                    g.refreshDashboard()
+                    g.refreshStationInfo()
+                }
             }
         }
     }

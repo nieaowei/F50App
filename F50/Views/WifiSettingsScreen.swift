@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct WifiSettingsScreen: View {
     @Environment(GlobalStore.self) var g: GlobalStore
@@ -101,22 +102,28 @@ struct WifiSettingsScreen: View {
     }
 
     func updateMode() {
+        Logger.ui.debug("Updating WiFi mode to \(self.wifiSwitch.rawValue)")
         Task {
             if wifiSwitch == .Off {
                 _ = await SetSwitchWiFiModule(SwitchOption: false).set(g.zteSvc)
+                Logger.ui.info("WiFi turned off")
             } else if wifiSwitch == .Chip2_4 {
                 _ = await SetSwitchWiFiChip(ChipEnum: .Chip2_4, GuestEnable: false).set(g.zteSvc)
+                Logger.ui.info("WiFi switched to 2.4 GHz")
             } else {
                 _ = await SetSwitchWiFiChip(ChipEnum: .Chip5, GuestEnable: false).set(g.zteSvc)
+                Logger.ui.info("WiFi switched to 5 GHz")
             }
         }
     }
 
     func updateInfo() {
+        Logger.ui.debug("Updating WiFi AP info: SSID=\(self.ssid)")
         Task {
             guard let passwordData = pass.data(using: .utf8) else { return }
             let setter = SetAccessPointInfo(SSID: ssid, AuthMode: authmode, ApBroadcastDisabled: (!broadcast).u8, ApMaxStationNumber: max, Password: passwordData.base64EncodedString())
             _ = await setter.set(g.zteSvc)
+            Logger.ui.info("WiFi AP settings applied")
         }
     }
 }

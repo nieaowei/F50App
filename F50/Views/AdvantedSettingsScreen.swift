@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct AdvantedSettingsScreen: View {
     @Environment(GlobalStore.self) var g: GlobalStore
@@ -138,6 +139,7 @@ struct AdvantedSettingsScreen: View {
     }
 
     func updateBand() {
+        Logger.ui.debug("Updating band lock settings")
         Task {
             var lteSet = SetLTEBandLock()
             for (band, enable) in lteBands {
@@ -146,6 +148,7 @@ struct AdvantedSettingsScreen: View {
                 }
             }
             _ = await lteSet.set(g.zteSvc)
+            Logger.ui.info("LTE band lock applied")
 
             var nrSet = SetNRBandLock()
             for (band, enable) in nrBands {
@@ -154,6 +157,7 @@ struct AdvantedSettingsScreen: View {
                 }
             }
             _ = await nrSet.set(g.zteSvc)
+            Logger.ui.info("NR band lock applied")
 
             g.refreshAdvantedSettings()
         }
@@ -161,10 +165,13 @@ struct AdvantedSettingsScreen: View {
 
     func updateLockInfo() {
         _ = SetCellLock(earfcn: .init(EARFCN), pci: .init(pci), rat: rat)
+        Logger.ui.debug("updateLockInfo called but not executed (unimplemented)")
     }
 
     func updateLockInfoFromNeighbor(_ neighbor: NeighborCellInfo) {
+        Logger.ui.debug("Locking cell from neighbor: EARFCN=\(neighbor.earfcn.value) PCI=\(neighbor.pci.value)")
         guard let toolbar = g.toolbar else {
+            Logger.ui.error("Cannot lock cell: toolbar info not loaded")
             return
         }
         var rat = RatType.Rat4G
@@ -173,19 +180,29 @@ struct AdvantedSettingsScreen: View {
         } else if toolbar.network_type.is5G {
             rat = RatType.Rat5G
         } else {
+            Logger.ui.error("Cannot lock cell: unknown network type")
             return
         }
         Task {
             let res = await SetCellLock(earfcn: neighbor.earfcn, pci: neighbor.pci, rat: rat).set(g.zteSvc)
-            print(res)
+            if case .success = res {
+                Logger.ui.info("Cell locked successfully")
+            } else if case .failure(let err) = res {
+                Logger.ui.error("Failed to lock cell: \(err.localizedDescription)")
+            }
             g.refreshAdvantedSettings()
         }
     }
 
     func unlockAll() {
+        Logger.ui.debug("Unlocking all cells")
         Task {
             let res = await UnlockAllCell().set(g.zteSvc)
-            print(res)
+            if case .success = res {
+                Logger.ui.info("All cells unlocked")
+            } else if case .failure(let err) = res {
+                Logger.ui.error("Failed to unlock all cells: \(err.localizedDescription)")
+            }
             g.refreshAdvantedSettings()
         }
     }

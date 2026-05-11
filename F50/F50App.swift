@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import OSLog
 
 import ServiceManagement
 
@@ -15,9 +16,9 @@ func registerHelper() {
     do {
         let svc = SMAppService.loginItem(identifier: bundleID)
         try svc.register()
-        print(svc.status.rawValue)
+        Logger.ui.debug("Helper registered: \(svc.status.rawValue)")
     } catch {
-        print(error)
+        Logger.ui.error("Failed to register helper: \(error.localizedDescription)")
     }
 }
 
@@ -40,12 +41,16 @@ private func checkHelperStatus() -> Bool {
 }
 
 func startHelper() {
-    guard let helperURL = findHelperURL() else { return }
+    guard let helperURL = findHelperURL() else {
+        Logger.ui.error("Helper app not found in bundle")
+        return
+    }
     let conf = NSWorkspace.OpenConfiguration()
     conf.activates = false
     conf.hides = false
     conf.createsNewApplicationInstance = false
     NSWorkspace.shared.openApplication(at: helperURL, configuration: conf)
+    Logger.ui.debug("Helper app launched")
 }
 
 @main
@@ -74,9 +79,12 @@ struct F50App: App {
     }
 
     init() {
+        Logger.ui.debug("App launching")
         if !checkHelperStatus() {
-//            registerHelper()
+            Logger.ui.debug("Helper not running, starting...")
             startHelper()
+        } else {
+            Logger.ui.debug("Helper already running")
         }
     }
 

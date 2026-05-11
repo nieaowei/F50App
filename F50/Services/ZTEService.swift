@@ -8,7 +8,7 @@
 import Foundation
 import OSLog
 
-private let logger = Logger(subsystem: "app.F50", category: "ZTEService")
+private nonisolated let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "app.F50", category: "ZTEService")
 
 enum RequestBody {
     case none
@@ -85,8 +85,10 @@ public actor ZTEService {
     
     func sendRequest(path: String, method: String = "GET", body: RequestBody = .none) async -> Result<(Data, URLResponse), Error> {
         let request = makeRequest(path: path, method: method, body: body)
+        logger.debug("\(method) \(path)")
         do {
             let (data, response) = try await session.data(for: request)
+            logger.debug("\(method) \(path) -> \(response)")
             return .success((data, response))
         } catch {
             logger.error("Request failed [\(method)] \(path): \(error.localizedDescription)")
@@ -121,6 +123,7 @@ public actor ZTEService {
     }
     
     func get_cmd<Resp: Decodable, Extras: Encodable>(cmds: [Cmds], extras: Extras = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
+        logger.debug("GET cmds: \(cmds.map(\.rawValue).joined(separator: ","))")
         let defaultItems = [
             "isTest": "false",
             "multi_data": "1",
@@ -166,6 +169,7 @@ public actor ZTEService {
     }
     
     func set_cmd<Params: Encodable, Resp: Decodable, Extras: Encodable>(goformId: GoFormIds, params: Params, extras: Extras? = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
+        logger.debug("SET \(goformId.rawValue)")
         let defaultItems = [
             "isTest": "false",
             "_": Date().timeIntervalSince1970.description,

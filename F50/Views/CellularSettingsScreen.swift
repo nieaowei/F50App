@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct CellularSettingsScreen: View {
     @Environment(GlobalStore.self) private var g: GlobalStore
@@ -72,16 +73,20 @@ struct CellularSettingsScreen: View {
     }
     
     func updateConnectionMode() {
+        Logger.ui.debug("Updating connection mode to \(self.connMode.rawValue)")
         let p = SetConnectionMode(connectionMode: connMode, roam_setting_option: roamingEnabled ? .OnTrue : .OffFalse)
         Task {
             _ = await p.set(g.zteSvc)
+            Logger.ui.info("Connection mode updated")
         }
     }
-    
+
     func updateNetworkMode() {
+        Logger.ui.debug("Updating network preference to \(self.netSelect.rawValue)")
         let p = SetBearerPreference(BearerPreference: netSelect)
         Task {
             _ = await p.set(g.zteSvc)
+            Logger.ui.info("Network preference updated")
         }
     }
 }

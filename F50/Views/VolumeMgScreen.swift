@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct VolumeMgScreen: View {
     @Environment(GlobalStore.self) private var g: GlobalStore
@@ -81,15 +82,22 @@ struct VolumeMgScreen: View {
     }
 
     func update() {
+        Logger.ui.debug("Updating data limit settings")
         Task {
             let p = SetDataLimitSetting(data_volume_limit_switch: volumeSwitch, data_volume_limit_unit: unit, data_volume_limit_size: totalVolume, wan_auto_clear_flow_data_switch: clearSwitch, traffic_clear_date: clearDate, notify_deviceui_enable: true, data_volume_alert_percent: 90)
             let res: Result<DefaultResp, Error> = await p.set(g.zteSvc)
-            if case .success(let data) = res, data.result.rawValue {}
+            if case .failure(let err) = res {
+                Logger.ui.error("Failed to set data limit: \(err.localizedDescription)")
+            } else {
+                Logger.ui.info("Data limit setting applied")
+            }
 
             let p1 = SetFlowCalibrationManual(calibration_way: unit, time: UInt64(usedVolume * 60 * 60), data: UInt64(usedVolume * 1024 * 1024 * 1024))
             let res1: Result<DefaultResp, Error> = await p1.set(g.zteSvc)
             if case .failure(let err) = res1 {
-                print(err)
+                Logger.ui.error("Failed to calibrate flow: \(err.localizedDescription)")
+            } else {
+                Logger.ui.info("Flow calibration applied")
             }
         }
     }

@@ -10,7 +10,7 @@ import Observation
 import OSLog
 import SwiftUI
 
-private let logger = Logger(subsystem: "app.F50", category: "GlobalStore")
+private nonisolated let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "app.F50", category: "GlobalStore")
 
 struct LDResp: AutoCmds {
     let LD: String
@@ -97,12 +97,12 @@ struct DashboardResp: AutoCmds {
     let lan_ipaddr: String
     let wifi_chip1_ssid1_ssid: String
     let wan_ipaddr: String?
-    let ipv6_wan_ipaddr: String
-    let imsi: String
-    let iccid: String
+    let ipv6_wan_ipaddr: String?
+    let imsi: String?
+    let iccid: String?
     let msisdn: String?
     let imei: String
-    let Z5g_rsrp: Int
+    let Z5g_rsrp: Int?
     let wifi_access_sta_num: StringUInt64
 
     let monthly_tx_bytes: UInt64
@@ -190,7 +190,11 @@ public class GlobalStore {
         guard let params = LoginParams(password: password, ld: ld.LD) else {
             return .failure(LoginError.invalidPassword)
         }
-        return await zteSvc.set_cmd(goformId: .LOGIN, params: params).map(\.0)
+        let result: Result<LoginResp, Error> = await zteSvc.set_cmd(goformId: .LOGIN, params: params).map(\.0)
+        if case .success(let resp) = result, resp.result == .Ok {
+            logger.info("Login success")
+        }
+        return result
     }
 
     func refreshLogin(password: String) {
@@ -223,10 +227,12 @@ public class GlobalStore {
 
     func refreshDashboard() {
         Task {
-            if case .success(let data) = await DashboardResp.get(zteSvc) {
+            let result = await DashboardResp.get(zteSvc)
+            if case .success(let data) = result {
                 dashboard = data
-            } else {
-                logger.error("Failed to refresh dashboard")
+                logger.debug("Dashboard refreshed")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh dashboard: \(err.localizedDescription)")
             }
         }
     }
@@ -235,10 +241,12 @@ public class GlobalStore {
 
     func refreshNetworkInfo() {
         Task {
-            if case .success(let data) = await NetworkInformation.get(zteSvc) {
+            let result = await NetworkInformation.get(zteSvc)
+            if case .success(let data) = result {
                 networkInfo = data
-            } else {
-                logger.error("Failed to refresh network info")
+                logger.debug("Network info refreshed")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh network info: \(err.localizedDescription)")
             }
         }
     }
@@ -250,8 +258,9 @@ public class GlobalStore {
             let result: Result<(VolumeInfo, URLResponse), Error> = await zteSvc.get_cmd_by_keys()
             if case .success(let (data, _)) = result {
                 volumeInfo = data
-            } else {
-                logger.error("Failed to refresh volume info")
+                logger.debug("Volume info refreshed")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh volume info: \(err.localizedDescription)")
             }
         }
     }
@@ -263,6 +272,8 @@ public class GlobalStore {
             let result: Result<VersionInfo, Error> = await VersionInfo.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 versionInfo = data
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh version info: \(err.localizedDescription)")
             }
         }
     }
@@ -274,8 +285,8 @@ public class GlobalStore {
             let result: Result<StationList, Error> = await StationList.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 stationInfo = data
-            } else {
-                logger.error("Failed to refresh station info")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh station info: \(err.localizedDescription)")
             }
         }
     }
@@ -287,8 +298,8 @@ public class GlobalStore {
             let result: Result<QueryDeviceAccessControlList, Error> = await QueryDeviceAccessControlList.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 accessControlInfo = data
-            } else {
-                logger.error("Failed to refresh access control info")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh access control: \(err.localizedDescription)")
             }
         }
     }
@@ -300,8 +311,8 @@ public class GlobalStore {
             let result: Result<ConnectionModeInfo, Error> = await ConnectionModeInfo.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 connectionModeInfo = data
-            } else {
-                logger.error("Failed to refresh connection mode info")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh connection mode: \(err.localizedDescription)")
             }
         }
     }
@@ -313,8 +324,8 @@ public class GlobalStore {
             let result: Result<CellularSettings, Error> = await CellularSettings.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 cellularSettings = data
-            } else {
-                logger.error("Failed to refresh cellular settings")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh cellular settings: \(err.localizedDescription)")
             }
         }
     }
@@ -326,8 +337,8 @@ public class GlobalStore {
             let result: Result<AccessPointInfoResp, Error> = await AccessPointInfoResp.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 wifiSettings = data
-            } else {
-                logger.error("Failed to refresh WiFi settings")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh WiFi settings: \(err.localizedDescription)")
             }
         }
     }
@@ -339,8 +350,8 @@ public class GlobalStore {
             let result: Result<SmsMessages, Error> = await SmsMessages.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 smsMessages = data
-            } else {
-                logger.error("Failed to refresh SMS list")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh SMS list: \(err.localizedDescription)")
             }
         }
     }
@@ -352,8 +363,8 @@ public class GlobalStore {
             let result: Result<DHCPSettings, Error> = await DHCPSettings.get(zteSvc)
             if case .success(let data) = result {
                 dhcpSettings = data
-            } else {
-                logger.error("Failed to refresh DHCP settings")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh DHCP settings: \(err.localizedDescription)")
             }
         }
     }
@@ -365,8 +376,8 @@ public class GlobalStore {
             let result: Result<DeviceSettings, Error> = await DeviceSettings.get(zteSvc)
             if case .success(let data) = result {
                 deviceSettings = data
-            } else {
-                logger.error("Failed to refresh device settings")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh device settings: \(err.localizedDescription)")
             }
         }
     }
@@ -378,8 +389,8 @@ public class GlobalStore {
             let result: Result<AdvantedSettings, Error> = await AdvantedSettings.get(zteSvc)
             if case .success(let data) = result {
                 advantedSettings = data
-            } else {
-                logger.error("Failed to refresh advanced settings")
+            } else if case .failure(let err) = result {
+                logger.error("Failed to refresh advanced settings: \(err.localizedDescription)")
             }
         }
     }

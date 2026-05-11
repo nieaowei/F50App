@@ -5,9 +5,8 @@
 //  Created by Nekilc on 2025/9/21.
 //
 
-import SwiftData
 import SwiftUI
-internal import Combine
+import OSLog
 
 struct ContentView: View {
     @Environment(GlobalStore.self) private var g: GlobalStore
@@ -61,6 +60,7 @@ struct ContentView: View {
 
             Button("Reboot", systemImage: "power") {
                 Task {
+                    Logger.ui.info("Reboot requested by user")
                     _ = await Reboot().set(g.zteSvc)
                 }
             }
@@ -70,9 +70,6 @@ struct ContentView: View {
 }
 
 struct ToolbarView: View {
-    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
-    let timer5 = Timer.publish(every: 300, on: .main, in: .common).autoconnect()
-
     let g: GlobalStore
 
     init(g: GlobalStore) {
@@ -107,15 +104,16 @@ struct ToolbarView: View {
         .padding(.horizontal)
         .task {
             g.refreshToolbar()
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(3))
+                g.refreshToolbar()
+            }
         }
-//        .task(id: g.toolbar?.wifi_onoff_state) {
-//            wifiState = g.toolbar?.wifi_onoff_state.rawValue ?? false
-//        }
-        .onReceive(timer) { _ in
-            g.refreshToolbar()
-        }
-        .onReceive(timer5) { _ in
-            g.refreshLogin(password: "")
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(300))
+                g.refreshLogin(password: "")
+            }
         }
         .task(id: g.toolbar?.ppp_status) {
             if let sta = g.toolbar?.ppp_status {
