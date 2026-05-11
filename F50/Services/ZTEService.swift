@@ -13,19 +13,20 @@ enum RequestBody {
     case form([String: String])
 }
 
-nonisolated protocol AutoCmds: Codable & Sendable{
+nonisolated protocol AutoCmds: Codable & Sendable {
     associatedtype CodingKeys: CaseIterable & RawRepresentable where CodingKeys.RawValue == String
     
-    static func get(_ zteSvc: ZTEService) async throws -> Self
+    static func get(_ zteSvc: ZTEService) async -> Result<Self, Error>
 }
 
 extension AutoCmds {
-    static func get(_ zteSvc: ZTEService) async throws -> Self {
-        
+    static func get(_ zteSvc: ZTEService) async -> Result<Self, Error> {
         let keys = Self.CodingKeys.allCases.map { $0.rawValue }
         let cmds = keys.compactMap { Cmds(rawValue: $0) }
-        let res: Self = try await zteSvc.get_cmd(cmds: cmds).0
-        return res
+        let resp: Result<(Self, URLResponse), Error> = await zteSvc.get_cmd(cmds: cmds)
+        return resp.map { (data, _) in
+            data
+        }
     }
 }
 
@@ -79,57 +80,104 @@ public actor ZTEService {
         return request
     }
     
-    func sendRequest(path: String, method: String = "GET", body: RequestBody = .none) async throws -> (Data, URLResponse) {
+    func sendRequest(path: String, method: String = "GET", body: RequestBody = .none) async -> Result<(Data, URLResponse), Error> {
         let request = makeRequest(path: path, method: method, body: body)
-        return try await session.data(for: request)
+        return await Result { @Sendable in
+            try await session.data(for: request)
+        }
     }
     
-    private func toDictStrStr<Params: Encodable>(params: Params) throws -> [String: String] {
+    private func toDictStrStr<Params: Encodable>(params: Params) -> Result<[String: String], Error> {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .useDefaultKeys
-        let extrasJson = try encoder.encode(params)
-        let jsonOj = try JSONSerialization.jsonObject(with: extrasJson) as? [String: Any]
+        let extrasJson = Result {
+            try encoder.encode(params)
+        }
+        guard case .success(let extrasJson) = extrasJson else {
+            return .failure(extrasJson.unwrapErr())
+        }
+        let jsonOj = Result {
+            try JSONSerialization.jsonObject(with: extrasJson) as? [String: Any]
+        }
         
-        return jsonOj?.compactMapValues { "\($0)" } ?? [:]
+        guard case .success(let jsonOj) = jsonOj else {
+            return .failure(jsonOj.unwrapErr())
+        }
+        
+        return .success(jsonOj!.compactMapValues { "\($0)" })
     }
     
-    func get_cmd<Resp: Decodable, Extras: Encodable>(cmds: [Cmds], extras: Extras = [String: String]()) async throws -> (Resp, URLResponse) {
-
+    func get_cmd<Resp: Decodable, Extras: Encodable>(cmds: [Cmds], extras: Extras = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
         let defaultItems = [
             "isTest": "false",
             "multi_data": "1",
             "_": Date().timeIntervalSince1970.description,
             "cmd": cmds.map { $0.rawValue }.joined(separator: ","),
         ]
-        let extraItems: [String: String] = try toDictStrStr(params: extras)
+        let extraItems = toDictStrStr(params: extras)
+        
+        guard case .success(let extraItems) = extraItems else {
+            return .failure(extraItems.unwrapErr())
+        }
         
         let merged = defaultItems.merging(extraItems) { _, new in new }
-        let (data, response) = try await sendRequest(path: "/goform/goform_get_cmd_process", method: "GET", body: .form(merged))
+        let resp = await sendRequest(path: "/goform/goform_get_cmd_process", method: "GET", body: .form(merged))
+        
+        guard case .success(let (data, response)) = resp else {
+            return .failure(resp.unwrapErr())
+        }
         #if DEBUG
         print(String(data: data, encoding: .utf8) ?? "")
         #endif
-        return try (JSONDecoder().decode(Resp.self, from: data), response)
+        let retData = Result {
+            try JSONDecoder().decode(Resp.self, from: data)
+        }
+        guard case .success(let retData) = retData else {
+            return .failure(retData.unwrapErr())
+        }
+        
+        return .success((retData, response))
     }
     
-    func get_cmd_by_keys<Resp: AutoCmds, Extras: Encodable>(extras: Extras? = [String: String]()) async throws -> (Resp, URLResponse) {
+    func get_cmd_by_keys<Resp: AutoCmds, Extras: Encodable>(extras: Extras? = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
         let keys = Resp.CodingKeys.allCases.map { $0.rawValue }
         let cmds = keys.compactMap { Cmds(rawValue: $0) }
-        return try await get_cmd(cmds: cmds, extras: extras)
+        return await get_cmd(cmds: cmds, extras: extras)
     }
     
-    func set_cmd<Params: Encodable, Resp: Decodable, Extras: Encodable>(goformId: GoFormIds, params: Params, extras: Extras? = [String: String]()) async throws -> (Resp, URLResponse) {
+    func set_cmd<Params: Encodable, Resp: Decodable, Extras: Encodable>(goformId: GoFormIds, params: Params, extras: Extras? = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
         let defaultItems = [
             "isTest": "false",
             "_": Date().timeIntervalSince1970.description,
             "goformId": goformId.rawValue,
         ]
-        let paramItems: [String: String] = try toDictStrStr(params: params)
+        let paramItems = toDictStrStr(params: params)
         
-        let extraItems: [String: String] = try toDictStrStr(params: extras)
+        guard case .success(let paramItems) = paramItems else {
+            return .failure(paramItems.unwrapErr())
+        }
+        
+        let extraItems = toDictStrStr(params: extras)
+        
+        guard case .success(let extraItems) = extraItems else {
+            return .failure(extraItems.unwrapErr())
+        }
         
         let merged = defaultItems.merging(paramItems) { _, new in new }.merging(extraItems, uniquingKeysWith: { _, new in new })
 
-        let (data, response) = try await sendRequest(path: "/goform/goform_set_cmd_process", method: "POST", body: .form(merged))
-        return try (JSONDecoder().decode(Resp.self, from: data), response)
+        let resp = await sendRequest(path: "/goform/goform_set_cmd_process", method: "POST", body: .form(merged))
+        
+        guard case .success(let (data, response)) = resp else {
+            return .failure(resp.unwrapErr())
+        }
+
+        let retData = Result {
+            try JSONDecoder().decode(Resp.self, from: data)
+        }
+        guard case .success(let retData) = retData else {
+            return .failure(retData.unwrapErr())
+        }
+        
+        return .success((retData, response))
     }
 }
