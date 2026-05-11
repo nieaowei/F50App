@@ -41,18 +41,20 @@ struct SmsMessage: Decodable, Identifiable {
     let tag: SmsTag
 
     var decodedContent: String {
-        if !content.isEmpty {
-            String(data: Data(base64Encoded: content)!, encoding: .utf8)!
-        } else {
-            ""
+        guard !content.isEmpty,
+              let data = Data(base64Encoded: content),
+              let decoded = String(data: data, encoding: .utf8)
+        else {
+            return ""
         }
+        return decoded
     }
 
-    var dateValue: Date {
+    var dateValue: Date? {
         let parser = DateFormatter()
         parser.locale = Locale(identifier: "en_US_POSIX")
         parser.dateFormat = "yyMMddHHmmssZ"
-        return parser.date(from: date.replacingOccurrences(of: ",", with: ""))!
+        return parser.date(from: date.replacingOccurrences(of: ",", with: ""))
     }
 }
 
@@ -82,8 +84,8 @@ struct GroupedMessage: Identifiable {
 
     var sortedMessages: [SmsMessage]
 
-    var lastDate: Date {
-        sortedMessages.last!.dateValue
+    var lastDate: Date? {
+        sortedMessages.last?.dateValue ?? nil
     }
 }
 
@@ -93,13 +95,18 @@ func groupSMS(messages: [SmsMessage]) -> [GroupedMessage] {
     for message in messages {
         if g.contains(where: { $0.key == message.number }) {
             g[message.number]?.sortedMessages.append(message)
-            if message.tag.isReaded() {
+            if !message.tag.isReaded() {
                 g[message.number]?.unread += 1
             }
         } else {
-            g[message.number] = GroupedMessage(number: message.number, unread: 0, sortedMessages: [message])
+            let unread: UInt64 = message.tag.isReaded() ? 0 : 1
+            g[message.number] = GroupedMessage(number: message.number, unread: unread, sortedMessages: [message])
         }
-        g[message.number]?.sortedMessages.sort { $0.dateValue < $1.dateValue }
+        g[message.number]?.sortedMessages.sort {
+            ($0.dateValue ?? .distantPast) < ($1.dateValue ?? .distantPast)
+        }
     }
-    return g.values.sorted { $0.lastDate > $1.lastDate }
+    return g.values.sorted {
+        ($0.lastDate ?? .distantPast) > ($1.lastDate ?? .distantPast)
+    }
 }

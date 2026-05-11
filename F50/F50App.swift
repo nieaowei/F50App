@@ -40,12 +40,12 @@ private func checkHelperStatus() -> Bool {
 }
 
 func startHelper() {
-//    let bundleID = "app.F50.Helper"
+    guard let helperURL = findHelperURL() else { return }
     let conf = NSWorkspace.OpenConfiguration()
     conf.activates = false
     conf.hides = false
     conf.createsNewApplicationInstance = false
-    NSWorkspace.shared.openApplication(at: findHelperURL()!, configuration: conf)
+    NSWorkspace.shared.openApplication(at: helperURL, configuration: conf)
 }
 
 @main
@@ -67,8 +67,9 @@ struct F50App: App {
     @AppStorage("gatewayPassword")
     var gatewayPassword: String = "admin"
 
-    var g: GlobalStore {
-        let zte = ZTEService(host: .init(string: defaultUrl)!, headers: ["Referer": defaultUrl])
+    var g: GlobalStore? {
+        guard let url = URL(string: defaultUrl) else { return nil }
+        let zte = ZTEService(host: url, headers: ["Referer": defaultUrl])
         return GlobalStore(zteSvc: zte)
     }
 
@@ -83,7 +84,7 @@ struct F50App: App {
 
     var body: some Scene {
         WindowGroup {
-            if enter {
+            if enter, let g {
                 ContentView()
                     .environment(g)
             } else {

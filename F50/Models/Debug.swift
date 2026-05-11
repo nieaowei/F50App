@@ -42,15 +42,17 @@ struct AdvantedSettings: AutoCmds, Equatable {
 
     var lockedLTE: [LTEBand] {
         lte_band_lock.split(separator: ",")
-            .map { sub in
-                LTEBand(rawValue: Int(sub)!)!
+            .compactMap { sub in
+                guard let intValue = Int(sub) else { return nil }
+                return LTEBand(rawValue: intValue)
             }
     }
 
     var lockedNR: [NRBand] {
         nr_band_lock.split(separator: ",")
-            .map { sub in
-                NRBand(rawValue: Int(sub)!)!
+            .compactMap { sub in
+                guard let intValue = Int(sub) else { return nil }
+                return NRBand(rawValue: intValue)
             }
     }
 }

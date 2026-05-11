@@ -73,7 +73,7 @@ struct EndSettingsScreen: View {
                 subMask = info.lan_netmask.stringValue
                 var dhcpLease = info.dhcpLease_hour
                 dhcpLease.removeLast()
-                lease = UInt64(dhcpLease)!
+                lease = UInt64(dhcpLease) ?? 0
             }
         }
         .task(id: g.deviceSettings) {

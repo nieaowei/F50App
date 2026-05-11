@@ -221,7 +221,12 @@ struct WelcomeScreen: View {
         status = .connecting
         isChecking = true
 
-        let zteSvc = ZTEService(host: URL(string: inputUrl)!, headers: ["Referer": inputUrl])
+        guard let url = URL(string: inputUrl) else {
+            status = .failed("Invalid URL")
+            isChecking = false
+            return
+        }
+        let zteSvc = ZTEService(host: url, headers: ["Referer": inputUrl])
         let store = GlobalStore(zteSvc: zteSvc)
 
         Task {

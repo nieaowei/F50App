@@ -94,7 +94,7 @@ struct WifiSettingsScreen: View {
                 }
                 authmode = current.AuthMode
                 max = current.ApMaxStationNumber
-                wifiSwitch = .init(rawValue: current.ChipIndex)!
+                wifiSwitch = WiFiModuleSwitch(rawValue: current.ChipIndex) ?? .Off
                 broadcast = !current.ApBroadcastDisabled.rawValue
             }
         }
@@ -114,7 +114,8 @@ struct WifiSettingsScreen: View {
 
     func updateInfo() {
         Task {
-            let setter = SetAccessPointInfo(SSID: ssid, AuthMode: authmode, ApBroadcastDisabled: (!broadcast).u8, ApMaxStationNumber: max, Password: pass.data(using: .utf8)!.base64EncodedString())
+            guard let passwordData = pass.data(using: .utf8) else { return }
+            let setter = SetAccessPointInfo(SSID: ssid, AuthMode: authmode, ApBroadcastDisabled: (!broadcast).u8, ApMaxStationNumber: max, Password: passwordData.base64EncodedString())
             _ = try await setter.set(g.zteSvc)
         }
     }

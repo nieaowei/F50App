@@ -19,11 +19,14 @@ struct LDResp: AutoCmds {
 struct LoginParams: Encodable {
     private let password: String
 
-    init(password: String, ld: String) {
-        let ph = SHA256.hash(data: password.data(using: .utf8)!)
-        let phHex = ph.map { String(format: "%02x", $0) }.joined().description.uppercased()
-        let catH = SHA256.hash(data: (phHex + ld).data(using: .utf8)!)
-        let catHex = catH.map { String(format: "%02x", $0) }.joined().description.uppercased()
+    init?(password: String, ld: String) {
+        guard let passwordData = password.data(using: .utf8) else { return nil }
+        let ph = SHA256.hash(data: passwordData)
+        let phHex = ph.map { String(format: "%02x", $0) }.joined().uppercased()
+        let catString = phHex + ld
+        guard let catData = catString.data(using: .utf8) else { return nil }
+        let catH = SHA256.hash(data: catData)
+        let catHex = catH.map { String(format: "%02x", $0) }.joined().uppercased()
         self.password = catHex
     }
 }
@@ -37,6 +40,10 @@ struct LoginResp: Decodable {
     }
 
     let result: Code
+}
+
+enum LoginError: Error {
+    case invalidPassword
 }
 
 struct ToolbarResp: AutoCmds {
@@ -174,7 +181,10 @@ public class GlobalStore {
 
     func login(password: String) async throws -> LoginResp {
         let ld = try await LD.get(zteSvc: zteSvc).LD
-        return try await zteSvc.set_cmd(goformId: .LOGIN, params: LoginParams(password: password, ld: ld)).0
+        guard let params = LoginParams(password: password, ld: ld) else {
+            throw LoginError.invalidPassword
+        }
+        return try await zteSvc.set_cmd(goformId: .LOGIN, params: params).0
     }
 
     func refreshLogin(password: String) {

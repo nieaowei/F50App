@@ -53,7 +53,7 @@ struct SmsScreen: View {
                     if let selectedMessage {
                         List(selectedMessage.sortedMessages) { msg in
                             VStack {
-                                Text(verbatim: msg.dateValue.description).font(.subheadline).foregroundColor(.secondary)
+                                Text(verbatim: msg.dateValue?.description ?? "").font(.subheadline).foregroundColor(.secondary)
                                 Text(verbatim: msg.decodedContent).textSelection(.enabled)
                             }
                         }

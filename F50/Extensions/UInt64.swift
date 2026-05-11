@@ -41,7 +41,7 @@ extension Int128 {
         formatter.formattingContext = .dynamic
         formatter.allowsNonnumericFormatting = false
         formatter.isAdaptive = true
-        return formatter.string(for: Int128(self))!
+        return formatter.string(for: Int128(self)) ?? "0 bytes"
     }
 }
 
