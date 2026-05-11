@@ -61,7 +61,7 @@ struct ContentView: View {
 
             Button("Reboot", systemImage: "power") {
                 Task {
-                    try await Reboot().set(g.zteSvc)
+                    await Reboot().set(g.zteSvc)
                 }
             }
             .buttonStyle(.bordered)
@@ -124,7 +124,7 @@ struct ToolbarView: View {
         }
         .onChange(of: pppStatus) { _, newValue in
             Task {
-                try await newValue ? SetConnectNetwork().set(g.zteSvc) : SetDisconnectNetwork().set(g.zteSvc)
+                await newValue ? SetConnectNetwork().set(g.zteSvc) : SetDisconnectNetwork().set(g.zteSvc)
             }
         }
     }

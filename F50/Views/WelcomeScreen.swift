@@ -230,22 +230,15 @@ struct WelcomeScreen: View {
         let store = GlobalStore(zteSvc: zteSvc)
 
         Task {
-            do {
-                let resp = try await store.login(password: password)
-                await MainActor.run {
-                    isChecking = false
-                    if resp.result == .Ok {
-                        defaultUrl = inputUrl
-                        saveToHistory()
-                        onConfirm(inputUrl, password)
-                    } else {
-                        status = .loginFailed("Login failed: Invalid password")
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    isChecking = false
-                    status = .loginFailed("Login failed: \(error.localizedDescription)")
+            let resp: Result<LoginResp, Error> = await store.login(password: password)
+            await MainActor.run {
+                isChecking = false
+                if case .success(let loginResp) = resp, loginResp.result == .Ok {
+                    defaultUrl = inputUrl
+                    saveToHistory()
+                    onConfirm(inputUrl, password)
+                } else {
+                    status = .loginFailed("Login failed: Invalid password")
                 }
             }
         }

@@ -166,7 +166,7 @@ struct NetworkInformation: Codable {
 //        } else {}
 //    }
 
-    static func get(_ zteSvc: ZTEService) async throws -> NetworkInformation {
-        try await zteSvc.get_cmd(cmds: [.network_information, .Lte_ca_status]).0
+    static func get(_ zteSvc: ZTEService) async -> Result<NetworkInformation, Error> {
+        await zteSvc.get_cmd(cmds: [.network_information, .Lte_ca_status]).map(\.0)
     }
 }

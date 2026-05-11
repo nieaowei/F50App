@@ -10,27 +10,39 @@ import Foundation
 struct LD: Decodable {
     let LD: String
 
-    static func get(zteSvc: ZTEService) async throws -> LD {
-        try await zteSvc.get_cmd(cmds: [.LD]).0
+    static func get(zteSvc: ZTEService) async -> Result<LD, Error> {
+        await zteSvc.get_cmd(cmds: [.LD]).map(\.0)
     }
 }
 
 struct RD: Decodable {
     let RD: String
-    static func get(zteSvc: ZTEService) async throws -> RD {
-        try await zteSvc.get_cmd(cmds: [.RD]).0
+    static func get(zteSvc: ZTEService) async -> Result<RD, Error> {
+        await zteSvc.get_cmd(cmds: [.RD]).map(\.0)
     }
 }
 
 
-func defaultGetAD(zteSvc: ZTEService)async throws -> String{
-    let rd = try await RD.get(zteSvc: zteSvc).RD
-    let v = try await VersionInfo.get(zteSvc: zteSvc)
-    
+func defaultGetAD(zteSvc: ZTEService) async -> Result<String, Error> {
+    let rdResult: Result<RD, Error> = await RD.get(zteSvc: zteSvc)
+    guard case .success(let rd) = rdResult else {
+        if case .failure(let err) = rdResult {
+            return .failure(err)
+        }
+        fatalError()
+    }
+    let vResult: Result<VersionInfo, Error> = await VersionInfo.get(zteSvc: zteSvc)
+    guard case .success(let v) = vResult else {
+        if case .failure(let err) = vResult {
+            return .failure(err)
+        }
+        fatalError()
+    }
+
     let s1 = (v.wa_inner_version+v.cr_version).sha256().uppercased()
-    let s2 = (s1 + rd).sha256().uppercased()
-    
-    return s2
+    let s2 = (s1 + rd.RD).sha256().uppercased()
+
+    return .success(s2)
 }
 
 extension String {

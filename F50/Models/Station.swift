@@ -43,12 +43,10 @@ struct StationList: AutoCmds {
         station_list.count + lan_station_list.count
     }
 
-    static func get(zteSvc: ZTEService) async throws -> StationList {
-        let decoded: StationList = try await Task.detached {
-            try await zteSvc.get_cmd_by_keys().0
-        }.value
-        return decoded
-//        try await zteSvc.get_cmd_by_keys().0
+    static func get(zteSvc: ZTEService) async -> Result<StationList, Error> {
+        await Task.detached {
+            await zteSvc.get_cmd_by_keys()
+        }.value.map(\.0)
     }
 
     var merged: [MergedStationInfo] {
@@ -129,7 +127,7 @@ struct QueryDeviceAccessControlList: Setter, Decodable {
             }
     }
 
-    static func get(zteSvc: ZTEService) async throws -> QueryDeviceAccessControlList {
-        try await zteSvc.get_cmd(cmds: [.queryDeviceAccessControlList]).0
+    static func get(zteSvc: ZTEService) async -> Result<QueryDeviceAccessControlList, Error> {
+        await zteSvc.get_cmd(cmds: [.queryDeviceAccessControlList]).map(\.0)
     }
 }

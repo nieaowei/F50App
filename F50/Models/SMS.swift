@@ -17,8 +17,8 @@ struct SmsCapacityInfo: Decodable {
     let sms_sim_send_total: StringUInt64
     let sms_sim_total: StringUInt64
 
-    static func get(zteSvc: ZTEService) async throws -> SmsCapacityInfo {
-        try await zteSvc.get_cmd(cmds: [.sms_capacity_info]).0
+    static func get(zteSvc: ZTEService) async -> Result<SmsCapacityInfo, Error> {
+        await zteSvc.get_cmd(cmds: [.sms_capacity_info]).map(\.0)
     }
 }
 
@@ -69,8 +69,8 @@ struct SmsMessages: Decodable {
 
     let messages: [SmsMessage]
 
-    static func get(zteSvc: ZTEService) async throws -> SmsMessages {
-        try await zteSvc.get_cmd(cmds: [.sms_data_total]).0
+    static func get(zteSvc: ZTEService) async -> Result<SmsMessages, Error> {
+        await zteSvc.get_cmd(cmds: [.sms_data_total]).map(\.0)
     }
 }
 

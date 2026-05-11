@@ -93,7 +93,7 @@ struct AdvantedSettingsScreen: View {
                     Button("New") {
                         showLock = true
                     }
-                    Button("Unlock All"){
+                    Button("Unlock All") {
                         unlockAll()
                     }
                 }
@@ -139,14 +139,22 @@ struct AdvantedSettingsScreen: View {
 
     func updateBand() {
         Task {
-            var set = SetNRBandLock()
-            for (band, enable) in nrBands {
+            var lteSet = SetLTEBandLock()
+            for (band, enable) in lteBands {
                 if enable {
-                    set.appendBand(band)
+                    lteSet.appendBand(band)
                 }
             }
-            _ = try await set.set(g.zteSvc)
-            
+            _ = await lteSet.set(g.zteSvc)
+
+            var nrSet = SetNRBandLock()
+            for (band, enable) in nrBands {
+                if enable {
+                    nrSet.appendBand(band)
+                }
+            }
+            _ = await nrSet.set(g.zteSvc)
+
             g.refreshAdvantedSettings()
         }
     }
@@ -168,15 +176,15 @@ struct AdvantedSettingsScreen: View {
             return
         }
         Task {
-            let res = try await SetCellLock(earfcn: neighbor.earfcn, pci: neighbor.pci, rat: rat).set(g.zteSvc)
+            let res = await SetCellLock(earfcn: neighbor.earfcn, pci: neighbor.pci, rat: rat).set(g.zteSvc)
             print(res)
             g.refreshAdvantedSettings()
         }
     }
-    
-    func unlockAll(){
-        Task{
-            let res = try await UnlockAllCell().set(g.zteSvc)
+
+    func unlockAll() {
+        Task {
+            let res = await UnlockAllCell().set(g.zteSvc)
             print(res)
             g.refreshAdvantedSettings()
         }

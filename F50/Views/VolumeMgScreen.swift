@@ -82,16 +82,14 @@ struct VolumeMgScreen: View {
 
     func update() {
         Task {
-            do {
-                let p = SetDataLimitSetting(data_volume_limit_switch: volumeSwitch, data_volume_limit_unit: unit, data_volume_limit_size: totalVolume, wan_auto_clear_flow_data_switch: clearSwitch, traffic_clear_date: clearDate, notify_deviceui_enable: true, data_volume_alert_percent: 90)
-                let res = try await p.set(g.zteSvc)
-                if res.result.rawValue {}
+            let p = SetDataLimitSetting(data_volume_limit_switch: volumeSwitch, data_volume_limit_unit: unit, data_volume_limit_size: totalVolume, wan_auto_clear_flow_data_switch: clearSwitch, traffic_clear_date: clearDate, notify_deviceui_enable: true, data_volume_alert_percent: 90)
+            let res: Result<DefaultResp, Error> = await p.set(g.zteSvc)
+            if case .success(let data) = res, data.result.rawValue {}
 
-                let p1 = SetFlowCalibrationManual(calibration_way: unit, time: UInt64(usedVolume * 60 * 60), data: UInt64(usedVolume * 1024 * 1024 * 1024))
-                let res1 = try await p1.set(g.zteSvc)
-
-            } catch {
-                print(error)
+            let p1 = SetFlowCalibrationManual(calibration_way: unit, time: UInt64(usedVolume * 60 * 60), data: UInt64(usedVolume * 1024 * 1024 * 1024))
+            let res1: Result<DefaultResp, Error> = await p1.set(g.zteSvc)
+            if case .failure(let err) = res1 {
+                print(err)
             }
         }
     }

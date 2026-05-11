@@ -32,20 +32,27 @@ nonisolated struct DefaultResp: Decodable, Sendable {
 nonisolated protocol Setter: Encodable & Sendable {
     associatedtype Resp: Decodable & Sendable = DefaultResp
 
-    func set(_ zteSvc: ZTEService) async throws -> Resp
-    func getAD(_ zteSvc: ZTEService) async throws -> String
+    func set(_ zteSvc: ZTEService) async -> Result<Resp, Error>
+    func getAD(_ zteSvc: ZTEService) async -> Result<String, Error>
 
     static func goformid() -> GoFormIds
 }
 
 extension Setter {
-    func set(_ zteSvc: ZTEService) async throws -> Resp {
-        let ad = try await self.getAD(zteSvc)
-        return try await zteSvc.set_cmd(goformId: Self.goformid(), params: self, extras: ["AD": ad]).0
+    func set(_ zteSvc: ZTEService) async -> Result<Resp, Error> {
+        let adResult = await self.getAD(zteSvc)
+        guard case .success(let ad) = adResult else {
+            if case .failure(let err) = adResult {
+                return .failure(err)
+            }
+            fatalError()
+        }
+        let result: Result<(Resp, URLResponse), Error> = await zteSvc.set_cmd(goformId: Self.goformid(), params: self, extras: ["AD": ad])
+        return result.map(\.0)
     }
 
-    func getAD(_ zteSvc: ZTEService) async throws -> String {
-        try await defaultGetAD(zteSvc: zteSvc)
+    func getAD(_ zteSvc: ZTEService) async -> Result<String, Error> {
+        return await defaultGetAD(zteSvc: zteSvc)
     }
 }
 

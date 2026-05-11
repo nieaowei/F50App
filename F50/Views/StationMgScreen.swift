@@ -95,9 +95,8 @@ struct StationMgScreen: View {
         accessControlInfo.appendBlack(name, mac)
 
         Task {
-            let resp = try await accessControlInfo.set(g.zteSvc)
-
-            if resp.result.rawValue {
+            let resp: Result<DefaultResp, Error> = await accessControlInfo.set(g.zteSvc)
+            if case .success(let data) = resp, data.result.rawValue {
                 g.refreshAccessControlInfo()
                 g.refreshStationInfo()
             }
@@ -110,9 +109,8 @@ struct StationMgScreen: View {
         }
         accessControlInfo.removeBlack(mac)
         Task {
-            let resp = try await accessControlInfo.set(g.zteSvc)
-
-            if resp.result.rawValue {
+            let resp: Result<DefaultResp, Error> = await accessControlInfo.set(g.zteSvc)
+            if case .success(let data) = resp, data.result.rawValue {
                 g.refreshAccessControlInfo()
                 g.refreshStationInfo()
             }

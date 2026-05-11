@@ -101,7 +101,6 @@ struct DashboardResp: AutoCmds {
     let imei: String
     let Z5g_rsrp: Int
     let wifi_access_sta_num: StringUInt64
-//    let lan_station_list: [StationInfo]
 
     let monthly_tx_bytes: UInt64
     let monthly_rx_bytes: UInt64
@@ -109,8 +108,8 @@ struct DashboardResp: AutoCmds {
     let data_volume_limit_size: String
     let monthly_time: UInt64
 
-    let wan_auto_clear_flow_data_switch: StringBool // 流量清零开关 on off
-    let traffic_clear_date: StringUInt64 // 清零日期
+    let wan_auto_clear_flow_data_switch: StringBool
+    let traffic_clear_date: StringUInt64
 
     var data_volume_limit_size_num: UInt64 {
         switch data_volume_limit_unit {
@@ -179,31 +178,36 @@ public class GlobalStore {
         _zteSvc = zteSvc
     }
 
-    func login(password: String) async throws -> LoginResp {
-        let ld = try await LD.get(zteSvc: zteSvc).LD
-        guard let params = LoginParams(password: password, ld: ld) else {
-            throw LoginError.invalidPassword
+    func login(password: String) async -> Result<LoginResp, Error> {
+        let ldResult = await LD.get(zteSvc: zteSvc)
+        guard case .success(let ld) = ldResult else {
+            if case .failure(let err) = ldResult { return .failure(err) }
+            fatalError()
         }
-        return try await zteSvc.set_cmd(goformId: .LOGIN, params: params).0
+        guard let params = LoginParams(password: password, ld: ld.LD) else {
+            return .failure(LoginError.invalidPassword)
+        }
+        return await zteSvc.set_cmd(goformId: .LOGIN, params: params).map(\.0)
     }
 
     func refreshLogin(password: String) {
         Task {
-            do {
-                _ = try await self.login(password: password)
-            } catch {}
+            _ = await self.login(password: password)
         }
     }
 
-    func toolbar() async throws -> ToolbarResp {
-        return try await zteSvc.get_cmd_by_keys().0
+    func toolbar() async -> Result<ToolbarResp, Error> {
+        await zteSvc.get_cmd_by_keys().map(\.0)
     }
 
     var toolbar: ToolbarResp?
 
     func refreshToolbar() {
         Task {
-            toolbar = try await self.toolbar()
+            let toolbarResult: Result<ToolbarResp, Error> = await self.toolbar()
+            if case .success(let data) = toolbarResult {
+                toolbar = data
+            }
             #if DEBUG
             print("Toolbar Refresh")
             #endif
@@ -214,12 +218,9 @@ public class GlobalStore {
 
     func refreshDashboard() {
         Task {
-            do {
-                dashboard = try await DashboardResp.get(zteSvc)
-            } catch {
-                print(error)
+            if case .success(let data) = await DashboardResp.get(zteSvc) {
+                dashboard = data
             }
-
             #if DEBUG
             print("Dashboard Refresh")
             #endif
@@ -230,7 +231,9 @@ public class GlobalStore {
 
     func refreshNetworkInfo() {
         Task {
-            networkInfo = try await NetworkInformation.get(zteSvc)
+            if case .success(let data) = await NetworkInformation.get(zteSvc) {
+                networkInfo = data
+            }
         }
     }
 
@@ -238,7 +241,10 @@ public class GlobalStore {
 
     func refreshVolumeInfo() {
         Task {
-            volumeInfo = try await zteSvc.get_cmd_by_keys().0
+            let result: Result<(VolumeInfo, URLResponse), Error> = await zteSvc.get_cmd_by_keys()
+            if case .success(let (data, _)) = result {
+                volumeInfo = data
+            }
         }
     }
 
@@ -246,7 +252,10 @@ public class GlobalStore {
 
     func refreshVersionInfo() {
         Task {
-            versionInfo = try await VersionInfo.get(zteSvc: zteSvc)
+            let result: Result<VersionInfo, Error> = await VersionInfo.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                versionInfo = data
+            }
         }
     }
 
@@ -254,7 +263,10 @@ public class GlobalStore {
 
     func refreshStationInfo() {
         Task {
-            stationInfo = try await StationList.get(zteSvc: zteSvc)
+            let result: Result<StationList, Error> = await StationList.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                stationInfo = data
+            }
         }
     }
 
@@ -262,7 +274,10 @@ public class GlobalStore {
 
     func refreshAccessControlInfo() {
         Task {
-            accessControlInfo = try await QueryDeviceAccessControlList.get(zteSvc: zteSvc)
+            let result: Result<QueryDeviceAccessControlList, Error> = await QueryDeviceAccessControlList.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                accessControlInfo = data
+            }
         }
     }
 
@@ -270,7 +285,10 @@ public class GlobalStore {
 
     func refreshConnectionModeInfo() {
         Task {
-            connectionModeInfo = try await ConnectionModeInfo.get(zteSvc: zteSvc)
+            let result: Result<ConnectionModeInfo, Error> = await ConnectionModeInfo.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                connectionModeInfo = data
+            }
         }
     }
 
@@ -278,7 +296,10 @@ public class GlobalStore {
 
     func refreshCellularSettings() {
         Task {
-            cellularSettings = try await CellularSettings.get(zteSvc: zteSvc)
+            let result: Result<CellularSettings, Error> = await CellularSettings.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                cellularSettings = data
+            }
         }
     }
 
@@ -286,7 +307,10 @@ public class GlobalStore {
 
     func refreshWifiSettings() {
         Task {
-            wifiSettings = try await AccessPointInfoResp.get(zteSvc: zteSvc)
+            let result: Result<AccessPointInfoResp, Error> = await AccessPointInfoResp.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                wifiSettings = data
+            }
         }
     }
 
@@ -294,7 +318,10 @@ public class GlobalStore {
 
     func refreshSmsList() {
         Task {
-            smsMessages = try await SmsMessages.get(zteSvc: zteSvc)
+            let result: Result<SmsMessages, Error> = await SmsMessages.get(zteSvc: zteSvc)
+            if case .success(let data) = result {
+                smsMessages = data
+            }
         }
     }
 
@@ -302,15 +329,21 @@ public class GlobalStore {
 
     func refreshDHCPSettings() {
         Task {
-            dhcpSettings = try await DHCPSettings.get(zteSvc)
+            let result: Result<DHCPSettings, Error> = await DHCPSettings.get(zteSvc)
+            if case .success(let data) = result {
+                dhcpSettings = data
+            }
         }
     }
-    
+
     var deviceSettings: DeviceSettings?
-    
+
     func refreshDeviceSettings() {
         Task {
-            deviceSettings = try await DeviceSettings.get(zteSvc)
+            let result: Result<DeviceSettings, Error> = await DeviceSettings.get(zteSvc)
+            if case .success(let data) = result {
+                deviceSettings = data
+            }
         }
     }
 
@@ -318,9 +351,10 @@ public class GlobalStore {
 
     func refreshAdvantedSettings() {
         Task {
-            advantedSettings = try await AdvantedSettings.get(zteSvc)
+            let result: Result<AdvantedSettings, Error> = await AdvantedSettings.get(zteSvc)
+            if case .success(let data) = result {
+                advantedSettings = data
+            }
         }
     }
-
-   
 }

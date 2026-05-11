@@ -82,8 +82,11 @@ public actor ZTEService {
     
     func sendRequest(path: String, method: String = "GET", body: RequestBody = .none) async -> Result<(Data, URLResponse), Error> {
         let request = makeRequest(path: path, method: method, body: body)
-        return await Result { @Sendable in
-            try await session.data(for: request)
+        do {
+            let (data, response) = try await session.data(for: request)
+            return .success((data, response))
+        } catch {
+            return .failure(error)
         }
     }
     
@@ -93,18 +96,24 @@ public actor ZTEService {
         let extrasJson = Result {
             try encoder.encode(params)
         }
-        guard case .success(let extrasJson) = extrasJson else {
-            return .failure(extrasJson.unwrapErr())
+        guard case .success(let jsonData) = extrasJson else {
+            if case .failure(let err) = extrasJson {
+                return .failure(err)
+            }
+            fatalError()
         }
         let jsonOj = Result {
-            try JSONSerialization.jsonObject(with: extrasJson) as? [String: Any]
+            try JSONSerialization.jsonObject(with: jsonData) as? [String: Any]
         }
         
-        guard case .success(let jsonOj) = jsonOj else {
-            return .failure(jsonOj.unwrapErr())
+        guard case .success(let dict) = jsonOj else {
+            if case .failure(let err) = jsonOj {
+                return .failure(err)
+            }
+            fatalError()
         }
         
-        return .success(jsonOj!.compactMapValues { "\($0)" })
+        return .success(dict!.compactMapValues { "\($0)" })
     }
     
     func get_cmd<Resp: Decodable, Extras: Encodable>(cmds: [Cmds], extras: Extras = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
@@ -116,15 +125,21 @@ public actor ZTEService {
         ]
         let extraItems = toDictStrStr(params: extras)
         
-        guard case .success(let extraItems) = extraItems else {
-            return .failure(extraItems.unwrapErr())
+        guard case .success(let extraStrs) = extraItems else {
+            if case .failure(let err) = extraItems {
+                return .failure(err)
+            }
+            fatalError()
         }
         
-        let merged = defaultItems.merging(extraItems) { _, new in new }
+        let merged = defaultItems.merging(extraStrs) { _, new in new }
         let resp = await sendRequest(path: "/goform/goform_get_cmd_process", method: "GET", body: .form(merged))
         
         guard case .success(let (data, response)) = resp else {
-            return .failure(resp.unwrapErr())
+            if case .failure(let err) = resp {
+                return .failure(err)
+            }
+            fatalError()
         }
         #if DEBUG
         print(String(data: data, encoding: .utf8) ?? "")
@@ -132,11 +147,14 @@ public actor ZTEService {
         let retData = Result {
             try JSONDecoder().decode(Resp.self, from: data)
         }
-        guard case .success(let retData) = retData else {
-            return .failure(retData.unwrapErr())
+        guard case .success(let decoded) = retData else {
+            if case .failure(let err) = retData {
+                return .failure(err)
+            }
+            fatalError()
         }
         
-        return .success((retData, response))
+        return .success((decoded, response))
     }
     
     func get_cmd_by_keys<Resp: AutoCmds, Extras: Encodable>(extras: Extras? = [String: String]()) async -> Result<(Resp, URLResponse), Error> {
@@ -153,31 +171,43 @@ public actor ZTEService {
         ]
         let paramItems = toDictStrStr(params: params)
         
-        guard case .success(let paramItems) = paramItems else {
-            return .failure(paramItems.unwrapErr())
+        guard case .success(let paramStrs) = paramItems else {
+            if case .failure(let err) = paramItems {
+                return .failure(err)
+            }
+            fatalError()
         }
         
         let extraItems = toDictStrStr(params: extras)
         
-        guard case .success(let extraItems) = extraItems else {
-            return .failure(extraItems.unwrapErr())
+        guard case .success(let extraStrs) = extraItems else {
+            if case .failure(let err) = extraItems {
+                return .failure(err)
+            }
+            fatalError()
         }
         
-        let merged = defaultItems.merging(paramItems) { _, new in new }.merging(extraItems, uniquingKeysWith: { _, new in new })
+        let merged = defaultItems.merging(paramStrs) { _, new in new }.merging(extraStrs, uniquingKeysWith: { _, new in new })
 
         let resp = await sendRequest(path: "/goform/goform_set_cmd_process", method: "POST", body: .form(merged))
         
         guard case .success(let (data, response)) = resp else {
-            return .failure(resp.unwrapErr())
+            if case .failure(let err) = resp {
+                return .failure(err)
+            }
+            fatalError()
         }
 
         let retData = Result {
             try JSONDecoder().decode(Resp.self, from: data)
         }
-        guard case .success(let retData) = retData else {
-            return .failure(retData.unwrapErr())
+        guard case .success(let decoded) = retData else {
+            if case .failure(let err) = retData {
+                return .failure(err)
+            }
+            fatalError()
         }
         
-        return .success((retData, response))
+        return .success((decoded, response))
     }
 }

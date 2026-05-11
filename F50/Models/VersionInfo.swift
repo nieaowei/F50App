@@ -16,11 +16,14 @@ struct VersionInfo: AutoCmds {
     let wa_inner_version: String
     let cr_version: String
 
-    mutating func get(zteSvc: ZTEService) async throws {
-        self = try await zteSvc.get_cmd_by_keys().0
+    mutating func get(zteSvc: ZTEService) async -> Result<Void, Error> {
+        let result: Result<(VersionInfo, URLResponse), Error> = await zteSvc.get_cmd_by_keys()
+        return result.map { (data, _) in
+            self = data
+        }
     }
 
-    static func get(zteSvc: ZTEService) async throws -> VersionInfo {
-        try await zteSvc.get_cmd_by_keys().0
+    static func get(zteSvc: ZTEService) async -> Result<VersionInfo, Error> {
+        await zteSvc.get_cmd_by_keys().map(\.0)
     }
 }

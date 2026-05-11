@@ -93,8 +93,6 @@ public extension Result {
         switch self { case .success: return self; case .failure(let error): return transform(error) }
     }
 
-    /// Returns the wrapped success value or `nil` if it is a failure.
-    func ok() -> Success? { if case .success(let value) = self { return value }; return nil }
 
     /// Returns the wrapped failure value or `nil` if it is a success.
     func err() -> Failure? { if case .failure(let error) = self { return error }; return nil }

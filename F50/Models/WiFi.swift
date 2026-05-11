@@ -38,8 +38,8 @@ struct AccessPointInfoResp: Decodable, Equatable {
         }
     }
 
-    static func get(zteSvc: ZTEService) async throws -> AccessPointInfoResp {
-        try await zteSvc.get_cmd(cmds: [.queryAccessPointInfo, .queryWiFiModuleSwitch]).0
+    static func get(zteSvc: ZTEService) async -> Result<AccessPointInfoResp, Error> {
+        await zteSvc.get_cmd(cmds: [.queryAccessPointInfo, .queryWiFiModuleSwitch]).map(\.0)
     }
 }
 

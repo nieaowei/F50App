@@ -26,8 +26,8 @@ struct ConnectionModeInfo: Decodable, Equatable {
     let connectionMode: ConnectionMode
     let autoConnectWhenRoaming: StringBool // on off
 
-    static func get(zteSvc: ZTEService) async throws -> ConnectionModeInfo {
-        try await zteSvc.get_cmd(cmds: [.ConnectionMode]).0
+    static func get(zteSvc: ZTEService) async -> Result<ConnectionModeInfo, Error> {
+        await zteSvc.get_cmd(cmds: [.ConnectionMode]).map(\.0)
     }
 }
 
@@ -84,7 +84,7 @@ struct SetBearerPreference: Setter {
 
     let net_select: BearerPreference
 
-    static func get(zteSvc: ZTEService) async throws -> CellularSettings {
-        try await zteSvc.get_cmd_by_keys().0
+    static func get(zteSvc: ZTEService) async -> Result<CellularSettings, Error> {
+        await zteSvc.get_cmd_by_keys().map(\.0)
     }
 }
