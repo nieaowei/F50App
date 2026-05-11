@@ -66,15 +66,6 @@ struct ContentView: View {
             }
             .buttonStyle(.bordered)
         }
-        .task {
-            do {
-                let r = try await g.login()
-
-                print("\(r)")
-            } catch {
-                print("\(error)")
-            }
-        }
     }
 }
 
@@ -124,7 +115,7 @@ struct ToolbarView: View {
             g.refreshToolbar()
         }
         .onReceive(timer5) { _ in
-            g.refreshLogin()
+            g.refreshLogin(password: "")
         }
         .task(id: g.toolbar?.ppp_status) {
             if let sta = g.toolbar?.ppp_status {

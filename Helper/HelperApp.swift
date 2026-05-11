@@ -9,6 +9,13 @@ import SwiftData
 import SwiftUI
 internal import Combine
 
+private let gatewayPasswordKey = "gatewayPassword"
+
+private var gatewayPassword: String {
+    get { UserDefaults.standard.string(forKey: gatewayPasswordKey) ?? "admin" }
+    set { UserDefaults.standard.set(newValue, forKey: gatewayPasswordKey) }
+}
+
 struct WifiListButton: View {
     let title: LocalizedStringKey
     let action: () -> Void
@@ -134,7 +141,7 @@ struct HelperApp: App {
                 .environment(g)
                 .task {
                     do {
-                        _ = try await g.login()
+                        _ = try await g.login(password: gatewayPassword)
                     } catch {
                         print(error)
                     }
@@ -146,13 +153,13 @@ struct HelperApp: App {
             }
             .task {
                 g.refreshToolbar()
-                g.refreshLogin()
+                g.refreshLogin(password: gatewayPassword)
             }
             .onReceive(timer) { _ in
                 g.refreshToolbar()
             }
             .onReceive(timer5) { _ in
-                g.refreshLogin()
+                g.refreshLogin(password: gatewayPassword)
             }
         }
         .menuBarExtraStyle(.window)

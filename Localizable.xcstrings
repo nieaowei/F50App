@@ -309,6 +309,16 @@
         }
       }
     },
+    "Checking connection..." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在检查连接..."
+          }
+        }
+      }
+    },
     "Clear Date" : {
       "localizations" : {
         "zh-Hans" : {
@@ -319,8 +329,56 @@
         }
       }
     },
+    "Clear History" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除历史记录"
+          }
+        }
+      }
+    },
+    "Configure Gateway Address" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "配置网关地址"
+          }
+        }
+      }
+    },
     "Confirm" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认"
+          }
+        }
+      }
+    },
+    "Connected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已连接"
+          }
+        }
+      }
+    },
+    "Connection failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接失败"
+          }
+        }
+      }
     },
     "Connection Mode" : {
       "localizations" : {
@@ -432,6 +490,26 @@
         }
       }
     },
+    "Enter password" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入密码"
+          }
+        }
+      }
+    },
+    "F50 Gateway" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "F50 网关"
+          }
+        }
+      }
+    },
     "File Sharing" : {
       "localizations" : {
         "zh-Hans" : {
@@ -443,7 +521,14 @@
       }
     },
     "Gateway Address" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网关地址"
+          }
+        }
+      }
     },
     "Host Name" : {
       "localizations" : {
@@ -454,6 +539,9 @@
           }
         }
       }
+    },
+    "http://192.168.0.1" : {
+      "shouldTranslate" : false
     },
     "ICCID" : {
       "localizations" : {
@@ -491,6 +579,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "指示灯"
+          }
+        }
+      }
+    },
+    "Invalid URL" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无效的 URL"
           }
         }
       }
@@ -639,7 +737,14 @@
       }
     },
     "OPEN" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开放"
+          }
+        }
+      }
     },
     "Operation" : {
       "localizations" : {
@@ -715,7 +820,14 @@
       "shouldTranslate" : false
     },
     "Reboot" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启"
+          }
+        }
+      }
     },
     "Remain" : {
       "localizations" : {
@@ -810,6 +922,16 @@
         }
       }
     },
+    "Skip" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳过"
+          }
+        }
+      }
+    },
     "SMS" : {
       "localizations" : {
         "zh-Hans" : {
@@ -841,7 +963,14 @@
       }
     },
     "Text" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文本"
+          }
+        }
+      }
     },
     "Time" : {
       "localizations" : {

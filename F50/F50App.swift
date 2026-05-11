@@ -61,11 +61,16 @@ struct F50App: App {
         }
     }()
 
-    var g: GlobalStore = {
-        let host = "http://192.168.0.1"
-        let zte = ZTEService(host: .init(string: host)!, headers: ["Referer": host])
+    @AppStorage("defaultUrl")
+    var defaultUrl: String = "http://192.168.0.1"
+
+    @AppStorage("gatewayPassword")
+    var gatewayPassword: String = "admin"
+
+    var g: GlobalStore {
+        let zte = ZTEService(host: .init(string: defaultUrl)!, headers: ["Referer": defaultUrl])
         return GlobalStore(zteSvc: zte)
-    }()
+    }
 
     init() {
         if !checkHelperStatus() {
@@ -82,14 +87,10 @@ struct F50App: App {
                 ContentView()
                     .environment(g)
             } else {
-                WelcomeScreen {
+                WelcomeScreen(defaultUrl: $defaultUrl) { url, password in
+                    gatewayPassword = password
                     enter = true
                 }
-//                .toolbar(removing: .title)
-//                .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
-//                .containerBackground(.ultraThinMaterial, for: .window)
-//                .windowMinimizeBehavior(.disabled)
-//                .windowResizeBehavior(.disabled)
             }
         }
         .modelContainer(sharedModelContainer)

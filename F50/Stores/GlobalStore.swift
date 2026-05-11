@@ -172,15 +172,15 @@ public class GlobalStore {
         _zteSvc = zteSvc
     }
 
-    func login() async throws -> LoginResp {
+    func login(password: String) async throws -> LoginResp {
         let ld = try await LD.get(zteSvc: zteSvc).LD
-        return try await zteSvc.set_cmd(goformId: .LOGIN, params: LoginParams(password: "admin", ld: ld)).0
+        return try await zteSvc.set_cmd(goformId: .LOGIN, params: LoginParams(password: password, ld: ld)).0
     }
 
-    func refreshLogin() {
+    func refreshLogin(password: String) {
         Task {
             do {
-                _ = try await self.login()
+                _ = try await self.login(password: password)
             } catch {}
         }
     }
