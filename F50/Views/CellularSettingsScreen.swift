@@ -74,14 +74,14 @@ struct CellularSettingsScreen: View {
     func updateConnectionMode() {
         let p = SetConnectionMode(connectionMode: connMode, roam_setting_option: roamingEnabled ? .OnTrue : .OffFalse)
         Task {
-            try await p.set(g.zteSvc)
+            _ = await p.set(g.zteSvc)
         }
     }
     
     func updateNetworkMode() {
         let p = SetBearerPreference(BearerPreference: netSelect)
         Task {
-            try await p.set(g.zteSvc)
+            _ = await p.set(g.zteSvc)
         }
     }
 }

@@ -87,7 +87,7 @@ struct EndSettingsScreen: View {
 
     func updateIndicator(_ status: Bool) {
         Task {
-            _ = try await SetIndicatorSwitch(indicator_light_switch: status.u8).set(g.zteSvc)
+            _ = await SetIndicatorSwitch(indicator_light_switch: status.u8).set(g.zteSvc)
         }
     }
 }

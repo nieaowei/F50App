@@ -103,11 +103,11 @@ struct WifiSettingsScreen: View {
     func updateMode() {
         Task {
             if wifiSwitch == .Off {
-                _ = try await SetSwitchWiFiModule(SwitchOption: false).set(g.zteSvc)
+                _ = await SetSwitchWiFiModule(SwitchOption: false).set(g.zteSvc)
             } else if wifiSwitch == .Chip2_4 {
-                _ = try await SetSwitchWiFiChip(ChipEnum: .Chip2_4, GuestEnable: false).set(g.zteSvc)
+                _ = await SetSwitchWiFiChip(ChipEnum: .Chip2_4, GuestEnable: false).set(g.zteSvc)
             } else {
-                _ = try await SetSwitchWiFiChip(ChipEnum: .Chip5, GuestEnable: false).set(g.zteSvc)
+                _ = await SetSwitchWiFiChip(ChipEnum: .Chip5, GuestEnable: false).set(g.zteSvc)
             }
         }
     }
@@ -116,7 +116,7 @@ struct WifiSettingsScreen: View {
         Task {
             guard let passwordData = pass.data(using: .utf8) else { return }
             let setter = SetAccessPointInfo(SSID: ssid, AuthMode: authmode, ApBroadcastDisabled: (!broadcast).u8, ApMaxStationNumber: max, Password: passwordData.base64EncodedString())
-            _ = try await setter.set(g.zteSvc)
+            _ = await setter.set(g.zteSvc)
         }
     }
 }
