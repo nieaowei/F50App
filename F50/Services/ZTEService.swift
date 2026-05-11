@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import OSLog
+
+private let logger = Logger(subsystem: "app.F50", category: "ZTEService")
 
 enum RequestBody {
     case none
@@ -86,6 +89,7 @@ public actor ZTEService {
             let (data, response) = try await session.data(for: request)
             return .success((data, response))
         } catch {
+            logger.error("Request failed [\(method)] \(path): \(error.localizedDescription)")
             return .failure(error)
         }
     }
@@ -141,9 +145,7 @@ public actor ZTEService {
             }
             fatalError()
         }
-        #if DEBUG
-        print(String(data: data, encoding: .utf8) ?? "")
-        #endif
+        logger.debug("GET response: \(String(data: data, encoding: .utf8) ?? "empty")")
         let retData = Result {
             try JSONDecoder().decode(Resp.self, from: data)
         }
@@ -189,6 +191,8 @@ public actor ZTEService {
         
         let merged = defaultItems.merging(paramStrs) { _, new in new }.merging(extraStrs, uniquingKeysWith: { _, new in new })
 
+        logger.debug("SET \(goformId.rawValue) params: \(paramStrs)")
+
         let resp = await sendRequest(path: "/goform/goform_set_cmd_process", method: "POST", body: .form(merged))
         
         guard case .success(let (data, response)) = resp else {
@@ -197,6 +201,7 @@ public actor ZTEService {
             }
             fatalError()
         }
+        logger.debug("SET response: \(String(data: data, encoding: .utf8) ?? "empty")")
 
         let retData = Result {
             try JSONDecoder().decode(Resp.self, from: data)

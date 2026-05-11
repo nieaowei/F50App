@@ -7,7 +7,10 @@
 
 import CryptoKit
 import Observation
+import OSLog
 import SwiftUI
+
+private let logger = Logger(subsystem: "app.F50", category: "GlobalStore")
 
 struct LDResp: AutoCmds {
     let LD: String
@@ -192,7 +195,10 @@ public class GlobalStore {
 
     func refreshLogin(password: String) {
         Task {
-            _ = await self.login(password: password)
+            let result = await self.login(password: password)
+            if case .failure(let err) = result {
+                logger.error("Login failed: \(err.localizedDescription)")
+            }
         }
     }
 
@@ -207,10 +213,9 @@ public class GlobalStore {
             let toolbarResult: Result<ToolbarResp, Error> = await self.toolbar()
             if case .success(let data) = toolbarResult {
                 toolbar = data
+            } else if case .failure(let err) = toolbarResult {
+                logger.error("Failed to refresh toolbar: \(err.localizedDescription)")
             }
-            #if DEBUG
-            print("Toolbar Refresh")
-            #endif
         }
     }
 
@@ -220,10 +225,9 @@ public class GlobalStore {
         Task {
             if case .success(let data) = await DashboardResp.get(zteSvc) {
                 dashboard = data
+            } else {
+                logger.error("Failed to refresh dashboard")
             }
-            #if DEBUG
-            print("Dashboard Refresh")
-            #endif
         }
     }
 
@@ -233,6 +237,8 @@ public class GlobalStore {
         Task {
             if case .success(let data) = await NetworkInformation.get(zteSvc) {
                 networkInfo = data
+            } else {
+                logger.error("Failed to refresh network info")
             }
         }
     }
@@ -244,6 +250,8 @@ public class GlobalStore {
             let result: Result<(VolumeInfo, URLResponse), Error> = await zteSvc.get_cmd_by_keys()
             if case .success(let (data, _)) = result {
                 volumeInfo = data
+            } else {
+                logger.error("Failed to refresh volume info")
             }
         }
     }
@@ -266,6 +274,8 @@ public class GlobalStore {
             let result: Result<StationList, Error> = await StationList.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 stationInfo = data
+            } else {
+                logger.error("Failed to refresh station info")
             }
         }
     }
@@ -277,6 +287,8 @@ public class GlobalStore {
             let result: Result<QueryDeviceAccessControlList, Error> = await QueryDeviceAccessControlList.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 accessControlInfo = data
+            } else {
+                logger.error("Failed to refresh access control info")
             }
         }
     }
@@ -288,6 +300,8 @@ public class GlobalStore {
             let result: Result<ConnectionModeInfo, Error> = await ConnectionModeInfo.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 connectionModeInfo = data
+            } else {
+                logger.error("Failed to refresh connection mode info")
             }
         }
     }
@@ -299,6 +313,8 @@ public class GlobalStore {
             let result: Result<CellularSettings, Error> = await CellularSettings.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 cellularSettings = data
+            } else {
+                logger.error("Failed to refresh cellular settings")
             }
         }
     }
@@ -310,6 +326,8 @@ public class GlobalStore {
             let result: Result<AccessPointInfoResp, Error> = await AccessPointInfoResp.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 wifiSettings = data
+            } else {
+                logger.error("Failed to refresh WiFi settings")
             }
         }
     }
@@ -321,6 +339,8 @@ public class GlobalStore {
             let result: Result<SmsMessages, Error> = await SmsMessages.get(zteSvc: zteSvc)
             if case .success(let data) = result {
                 smsMessages = data
+            } else {
+                logger.error("Failed to refresh SMS list")
             }
         }
     }
@@ -332,6 +352,8 @@ public class GlobalStore {
             let result: Result<DHCPSettings, Error> = await DHCPSettings.get(zteSvc)
             if case .success(let data) = result {
                 dhcpSettings = data
+            } else {
+                logger.error("Failed to refresh DHCP settings")
             }
         }
     }
@@ -343,6 +365,8 @@ public class GlobalStore {
             let result: Result<DeviceSettings, Error> = await DeviceSettings.get(zteSvc)
             if case .success(let data) = result {
                 deviceSettings = data
+            } else {
+                logger.error("Failed to refresh device settings")
             }
         }
     }
@@ -354,6 +378,8 @@ public class GlobalStore {
             let result: Result<AdvantedSettings, Error> = await AdvantedSettings.get(zteSvc)
             if case .success(let data) = result {
                 advantedSettings = data
+            } else {
+                logger.error("Failed to refresh advanced settings")
             }
         }
     }
