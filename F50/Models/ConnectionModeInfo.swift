@@ -49,6 +49,7 @@ enum BearerPreference: String, Codable, CaseIterable, Identifiable {
     case And4G3G = "WCDMA_AND_LTE"
     case Only4G = "Only_LTE"
     case Only3G = "Only_WCDMA"
+    case Auto = "NETWORK_auto"
 
     var localizedString: LocalizedStringKey {
         switch self {
@@ -64,6 +65,8 @@ enum BearerPreference: String, Codable, CaseIterable, Identifiable {
             LocalizedStringKey("4G")
         case .Only3G:
             LocalizedStringKey("3G")
+        case .Auto:
+            LocalizedStringKey("Auto")
         }
     }
 }

@@ -65,6 +65,8 @@ enum NetworkType: String, Codable, CaseIterable {
     case ENDC
     case SA
     case _5G = "5G"
+    
+    case NO_SERVICE = "no service"
 }
 
 extension NetworkType {
@@ -157,7 +159,7 @@ struct NetworkInformation: Codable {
     let lte_rsrq: Int?
     let lte_rssi: Int?
 
-    let network_type: Int
+    let network_type: Int?
     let Lte_ca_status: StringBool
 
 //    var current: NetworkInfo {
