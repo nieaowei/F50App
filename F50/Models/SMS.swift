@@ -110,3 +110,26 @@ func groupSMS(messages: [SmsMessage]) -> [GroupedMessage] {
         ($0.lastDate ?? .distantPast) > ($1.lastDate ?? .distantPast)
     }
 }
+
+struct SetMsgRead: Setter {
+    private var msg_id: String
+    let tag: UInt64
+
+    static func goformid() -> GoFormIds { .SET_MSG_READ }
+    
+    mutating func appendMsgId(id: String){
+        self.msg_id += "\(id);"
+    }
+    
+    init(msg_id: String, tag: UInt64) {
+        self.msg_id = msg_id
+        self.tag = tag
+    }
+}
+
+struct DeleteSms: Setter {
+    let msg_id: String
+    let notCallback: Bool
+
+    static func goformid() -> GoFormIds { .DELETE_SMS }
+}

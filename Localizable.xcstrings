@@ -7,6 +7,9 @@
     "%llu" : {
       "shouldTranslate" : false
     },
+    "%llu unread" : {
+
+    },
     "2.4 GHz" : {
       "shouldTranslate" : false
     },
@@ -433,6 +436,9 @@
         }
       }
     },
+    "Delete" : {
+
+    },
     "DHCP IP Pool" : {
       "localizations" : {
         "zh-Hans" : {
@@ -662,6 +668,9 @@
         }
       }
     },
+    "Message" : {
+
+    },
     "Neighbor Cell Information" : {
       "localizations" : {
         "zh-Hans" : {
@@ -721,6 +730,9 @@
           }
         }
       }
+    },
+    "No Message Selected" : {
+
     },
     "Off" : {
       "localizations" : {
@@ -899,6 +911,7 @@
       }
     },
     "Select a message" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -907,6 +920,9 @@
           }
         }
       }
+    },
+    "Select a message to view its contents" : {
+
     },
     "Signal Strength" : {
       "localizations" : {

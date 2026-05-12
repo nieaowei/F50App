@@ -253,5 +253,9 @@ enum GoFormIds: String, Codable {
     // notCallback
     case DISCONNECT_NETWORK
     case CONNECT_NETWORK
-    
+// sms
+    case SEND_SMS
+    case SET_MSG_READ
+    case DELETE_SMS
+
 }
