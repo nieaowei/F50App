@@ -92,7 +92,7 @@ public actor ZTEService {
 
     private func toDictStrStr<Params: Encodable>(params: Params) -> Result<[String: String], Error> {
         let jsonData: Data
-        switch Result { try JSONEncoder().encode(params) } {
+        switch Result(catching: { try JSONEncoder().encode(params) }) {
         case .success(let data):
             jsonData = data
         case .failure(let err):
@@ -129,7 +129,7 @@ public actor ZTEService {
         }
 
         let decoded: Resp
-        switch Result { try JSONDecoder().decode(Resp.self, from: data) } {
+        switch Result(catching: { try JSONDecoder().decode(Resp.self, from: data) }) {
         case .success(let v): decoded = v
         case .failure(let err):
             return .failure(err)
@@ -175,7 +175,7 @@ public actor ZTEService {
         }
 
         let decoded: Resp
-        switch Result { try JSONDecoder().decode(Resp.self, from: data) } {
+        switch Result(catching: { try JSONDecoder().decode(Resp.self, from: data) }) {
         case .success(let v): decoded = v
         case .failure(let err): return .failure(err)
         }

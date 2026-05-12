@@ -183,6 +183,9 @@
         }
       }
     },
+    "App Icon Design - macOS" : {
+
+    },
     "Apply" : {
       "localizations" : {
         "zh-Hans" : {
@@ -499,6 +502,9 @@
           }
         }
       }
+    },
+    "F" : {
+
     },
     "F50 Gateway" : {
       "localizations" : {
