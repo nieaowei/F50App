@@ -128,8 +128,17 @@ struct SetMsgRead: Setter {
 }
 
 struct DeleteSms: Setter {
-    let msg_id: String
+    private var msg_id: String
     let notCallback: Bool
 
     static func goformid() -> GoFormIds { .DELETE_SMS }
+    
+    mutating func appendMsgId(id: String){
+        self.msg_id += "\(id);"
+    }
+    
+    init(msg_id: String, notCallback: Bool) {
+        self.msg_id = msg_id
+        self.notCallback = notCallback
+    }
 }
